@@ -53,7 +53,7 @@ GENDER, PHOTO, LOCATION, BIO = range(4)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Starts the conversation and asks the user about their gender."""
-    reply_keyboard = [["Boy", "Girl", "Other"]]
+    reply_keyboard = [["hello", "hi", "wassup"]]
 
     await update.message.reply_text(
         "Hi! My name is Professor Bot. I will hold a conversation with you. "

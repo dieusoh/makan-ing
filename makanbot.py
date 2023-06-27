@@ -45,7 +45,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     user = update.effective_user
     first_name = user.first_name
     # Keyboard for user to send location -> Need to account for typing as well
-    reply_keyboard = [[KeyboardButton(text="Send current location", request_location=True)]]
+    reply_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)]]
 
     start_reply = ("Hi " + first_name + "!"
                    + " Let's look for some makan spots for you. \n\n"

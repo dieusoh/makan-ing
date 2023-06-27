@@ -1,7 +1,18 @@
-# WHY DID I DECIDE TO DO THIS
-# THE FOLLY OF MAN
-# I AM ICARUS AND I AM PLUMMETING
-# WHY DID I THINK I WAS A STRONG, INDEPENDENT WOMEN. TAYLOR SWIFT U OVERSOLD THIS LIFE TO ME.
+#!/usr/bin/env python
+# pylint: disable=unused-argument, wrong-import-position
+# This program is dedicated to the public domain under the CC0 license.
+
+"""
+First, a few callback functions are defined. Then, those functions are passed to
+the Application and registered at their respective places.
+Then, the bot is started and runs until we press Ctrl-C on the command line.
+
+Usage:
+Example of a bot-user conversation using ConversationHandler.
+Send /start to initiate the conversation.
+Press Ctrl-C on the command line or send a signal to the process to stop the
+bot.
+"""
 
 import logging
 
@@ -18,58 +29,46 @@ if __version_info__ < (20, 0, 0, "alpha", 5):
         f"{TG_VER} version of this example, "
         f"visit https://docs.python-telegram-bot.org/en/v{TG_VER}/examples.html"
     )
-from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update 
+from telegram import ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
 from telegram.ext import (
     Application,
     CommandHandler,
     ContextTypes,
     ConversationHandler,
     MessageHandler,
-    PicklePersistence,
     filters,
 )
 
-# Enables logging
+# Enable logging
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
 )
-# Sets higher logging level for httpx to avoid all GET and POST requests being logged
+# set higher logging level for httpx to avoid all GET and POST requests being logged
 logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
 GENDER, PHOTO, LOCATION, BIO = range(4)
 
-# Sends messages for /start command
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
-    user = update.effective_user
-    first_name = user.first_name
-    # Keyboard for user to send location -> Need to account for typing as well
-    reply_keyboard = [[KeyboardButton(text="Send current location", request_location=True)]]
 
-    start_reply = ("Hi " + first_name + "!"
-                   + " Let's look for some makan spots for you. \n\n"
-                   + "Send me your current location or where you plan to go."
-                   )
-    
-    await update.message.reply_text (
-        start_reply,
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    """Starts the conversation and asks the user about their gender."""
+    reply_keyboard = [["Boy", "Girl", "Other"]]
+
+    await update.message.reply_text(
+        "Hi! My name is Professor Bot. I will hold a conversation with you. "
+        "Send /cancel to stop talking to me.\n\n"
+        "Are you a boy or a girl?",
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True, input_field_placeholder="Send me your location! (Stalker vibes, jk)"
-        )
-        
+            reply_keyboard, one_time_keyboard=True, input_field_placeholder="Boy or Girl?"
+        ),
     )
 
     return GENDER
 
-###################
-
-
-
-
 
 async def gender(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    ###Stores the selected gender and asks for a photo."""
+    """Stores the selected gender and asks for a photo."""
     user = update.message.from_user
     logger.info("Gender of %s: %s", user.first_name, update.message.text)
     await update.message.reply_text(
@@ -157,7 +156,7 @@ def main() -> None:
 
     # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
     conv_handler = ConversationHandler(
-    entry_points=[CommandHandler("start", start)],
+        entry_points=[CommandHandler("start", start)],
         states={
             GENDER: [MessageHandler(filters.Regex("^(Boy|Girl|Other)$"), gender)],
             PHOTO: [MessageHandler(filters.PHOTO, photo), CommandHandler("skip", skip_photo)],

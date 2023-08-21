@@ -45,7 +45,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     user = update.effective_user
     first_name = user.first_name
     # Keyboard for user to send location -> Need to account for typing as well
-    reply_keyboard = [[KeyboardButton(text="Send current location", request_location=True)]]
+    reply_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)]]
 
     start_reply = ("Hi " + first_name + "!"
                    + " Let's look for some makan spots for you. \n\n"
@@ -60,48 +60,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         
     )
 
-    return GENDER
-
-###################
-
-
-
-
-
-async def gender(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    ###Stores the selected gender and asks for a photo."""
-    user = update.message.from_user
-    logger.info("Gender of %s: %s", user.first_name, update.message.text)
-    await update.message.reply_text(
-        "I see! Please send me a photo of yourself, "
-        "so I know what you look like, or send /skip if you don't want to.",
-        reply_markup=ReplyKeyboardRemove(),
-    )
-
-    return PHOTO
-
-
-async def photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Stores the photo and asks for a location."""
-    user = update.message.from_user
-    photo_file = await update.message.photo[-1].get_file()
-    await photo_file.download_to_drive("user_photo.jpg")
-    logger.info("Photo of %s: %s", user.first_name, "user_photo.jpg")
-    await update.message.reply_text(
-        "Gorgeous! Now, send me your location please, or send /skip if you don't want to."
-    )
-
-    return LOCATION
-
-
-async def skip_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Skips the photo and asks for a location."""
-    user = update.message.from_user
-    logger.info("User %s did not send a photo.", user.first_name)
-    await update.message.reply_text(
-        "I bet you look great! Now, send me your location please, or send /skip."
-    )
-
     return LOCATION
 
 
@@ -110,34 +68,15 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     user_location = update.message.location
     logger.info(
-        "Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude
+        "Location of %s: %f / %f", user.username, user_location.latitude, user_location.longitude
     )
     await update.message.reply_text(
-        "Maybe I can visit you sometime! At last, tell me something about yourself."
+        "Thanks! Let me look for some yummy food near you."
     )
 
-    return BIO
+    return
 
-
-async def skip_location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Skips the location and asks for info about the user."""
-    user = update.message.from_user
-    logger.info("User %s did not send a location.", user.first_name)
-    await update.message.reply_text(
-        "You seem a bit paranoid! At last, tell me something about yourself."
-    )
-
-    return BIO
-
-
-async def bio(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Stores the info about the user and ends the conversation."""
-    user = update.message.from_user
-    logger.info("Bio of %s: %s", user.first_name, update.message.text)
-    await update.message.reply_text("Thank you! I hope we can talk again some day.")
-
-    return ConversationHandler.END
-
+###################
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Cancels and ends the conversation."""
@@ -149,7 +88,6 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
     return ConversationHandler.END
 
-
 def main() -> None:
     """Run the bot."""
     # Create the Application and pass it your bot's token.
@@ -159,15 +97,11 @@ def main() -> None:
     conv_handler = ConversationHandler(
     entry_points=[CommandHandler("start", start)],
         states={
-            GENDER: [MessageHandler(filters.Regex("^(Boy|Girl|Other)$"), gender)],
-            PHOTO: [MessageHandler(filters.PHOTO, photo), CommandHandler("skip", skip_photo)],
             LOCATION: [
                 MessageHandler(filters.LOCATION, location),
-                CommandHandler("skip", skip_location),
             ],
-            BIO: [MessageHandler(filters.TEXT & ~filters.COMMAND, bio)],
         },
-        fallbacks=[CommandHandler("cancel", cancel)],
+        fallbacks=[CommandHandler("cancel", cancel)]
     )
 
     application.add_handler(conv_handler)

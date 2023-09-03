@@ -19,5 +19,6 @@ phases:
       - docker push 187111385503.dkr.ecr.ap-southeast-1.amazonaws.com/makanrepo:latest
       - echo Writing image definitions file...
       - printf '[{"name":"hello-world","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - cd ..
 artifacts:
   files: imagedefinitions.json

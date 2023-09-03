@@ -12,6 +12,7 @@ phases:
       - cd MakanDocker   
       - docker build -t makanrepo .
       - docker tag makanrepo:latest 187111385503.dkr.ecr.ap-southeast-1.amazonaws.com/makanrepo:latest 
+      - cd ..
   post_build:
     commands:
       - echo Build completed on `date`
@@ -19,6 +20,5 @@ phases:
       - docker push 187111385503.dkr.ecr.ap-southeast-1.amazonaws.com/makanrepo:latest
       - echo Writing image definitions file...
       - printf '[{"name":"hello-world","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-      - cd ..
 artifacts:
   files: imagedefinitions.json

@@ -6,7 +6,7 @@
 # DIEU'S TO DO:
     # Make sure it's not stuck on an infinite loop; integrate /cancel command.
     # Find a list of food categories from Burpple
-    # Ensure that top and bottom row for food categories are always there -> surprise me and more options buttons
+
 
 import logging
 
@@ -43,21 +43,21 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
-GENDER, PHOTO, LOCATION, SELECTION_1,SELECTION_2 = range(5)
+GENDER, PHOTO, LOCATION, SELECTION_1, SELECTION_2, SELECTION_3 = range(6)
 
 # Sends messages for /start command; bot will ask user what they feel like eating
 # I would name this SELECTION_1 but it breaks the code and I don't want to fix it.
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     user = update.effective_user
     first_name = user.first_name
-    start_reply = ("Hi " + first_name + "!"
-                   + " What do you feel like eating today?")
+    start_reply = ("Hi " + first_name + "! " + "I'm the makan-ing bot. I can help you find some makan spots near you! \n\n"
+                   + "What do you feel like eating today?")
 
 # 1st set of food categories
     reply_keyboard_1 = [
-        ["IDK, surprise me!"], 
+        ["IDK, surprise me!"],
         ["Chinese", "Malay", "Indian"],
-        ["Western", "Japanese", "Korean"],
+        ["Cafes","Vegetarian", "Hawker food"],
         ["More options"],
     ]
 
@@ -71,37 +71,111 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 
     return SELECTION_2
 
+###!!! 2nd set of food categories IF user clicks on "More options" in start
 async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     first_name = user.first_name
-    user_choice = update.message.text
+    user_food_choice = update.message.text
+    lower_user_food_choice = str.lower(user_food_choice)
     user_location = update.message.location
-    print(user.username + "'s user choice = " + user_choice)
+    print(user.username + "'s user choice = " + user_food_choice)
 
-# 2nd set of food categories IF user clicks on "More options"
-    if user_choice == "More options":
-        start_reply = ("Here are more options!")
+    if user_food_choice == "More options":
+        more_options_reply = ("Here are more options!")
         reply_keyboard_2 = [
         ["IDK, surprise me!"], 
-        ["1", "2", "3"],
-        ["4", "5", "6"],
+        ["Japanese", "Korean", "Thai"],
+        ["Pasta", "Pizza", "Burger"],
         ["More options"],
         ]
         await update.message.reply_text (
-            start_reply,
+            more_options_reply,
             reply_markup=ReplyKeyboardMarkup(
                 reply_keyboard_2, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
             )
         )
 
-# IF user clicks on any of the food categories, this flow will happen
+# IF user clicks on any food categories from selection_2, this flow will happen:
     else:
-        start_reply = ("Searching for " + user_choice)
+        user_food_choice_reply = ("Ooh, that sounds delicious! \n\n"
+                       + "Send me your current location so that I look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
         await update.message.reply_text (
-            start_reply
+            user_food_choice_reply
+            )
+        
+    return SELECTION_3
+
+###!!! 3rd set of food categories IF user clicks on "More options" in selection_2
+async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    user = update.message.from_user
+    first_name = user.first_name
+    user_food_choice = update.message.text
+    lower_user_food_choice = str.lower(user_food_choice)
+    user_location = update.message.location
+    print(user.username + "'s user choice = " + user_food_choice)
+
+    if user_food_choice == "More options":
+        more_options_reply = ("Here are more options!")
+        reply_keyboard_3 = [
+        ["IDK, surprise me!"], 
+        ["Brunch", "Bubble tea", "Dessert"],
+        ["Supper", "Hot pot", "Salads"],
+        ["More options"],
+        ]
+        await update.message.reply_text (
+            more_options_reply,
+            reply_markup=ReplyKeyboardMarkup(
+                reply_keyboard_3, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+            )
+        )
+
+# IF user clicks on any food categories from selection_3, this flow will happen:
+    else:
+        user_food_choice_reply = ("Ooh, that sounds delicious! \n\n"
+                       + "Send me your current location so that I look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
+        await update.message.reply_text (
+            user_food_choice_reply
+            )
+        ### here is where i'll put return LOCATION
+        
+    return SELECTION_1
+
+###!!! Return to 1st set of food categories IF user clicks on "More options" in selection_3
+async def selection_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    user = update.message.from_user
+    first_name = user.first_name
+    user_food_choice = update.message.text
+    lower_user_food_choice = str.lower(user_food_choice)
+    user_location = update.message.location
+    print(user.username + "'s user choice = " + user_food_choice)
+
+    if user_food_choice == "More options":
+        more_options_reply = ("Here are more options!")
+        reply_keyboard_1 = [
+        ["IDK, surprise me!"],
+        ["Chinese", "Malay", "Indian"],
+        ["Cafes","Vegetarian", "Hawker food"],
+        ["More options"],
+    ]
+        await update.message.reply_text (
+            more_options_reply,
+            reply_markup=ReplyKeyboardMarkup(
+                reply_keyboard_1, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+            )
+        )
+
+# IF user clicks on any food categories from selection_1, this flow will happen:
+    else:
+        user_food_choice_reply = ("Ooh, that sounds delicious! \n\n"
+                       + "Send me your current location so that I look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
+        await update.message.reply_text (
+            user_food_choice_reply
             )
         
     return SELECTION_2
+
+
+
 
 
 ### CLEAN UP THE BELOW FLOW. Once we're done logging the food category from the user, we can work on getting nearby options with that category. ###
@@ -113,14 +187,14 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 # async def selection(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 #     """Reads the option selected by the user or gives more options."""
 #     user = update.message.from_user
-#     user_choice = update.message.text
+#     user_food_choice = update.message.text
 #     user_location = update.message.location
-#     print ("user choice = " + user_choice)
+#     print ("user choice = " + user_food_choice)
 #     # logger.info(
-#     #     "Message  ", user_choice
+#     #     "Message  ", user_food_choice
 #     # )
 
-#     if user_choice == "More options":
+#     if user_food_choice == "More options":
 
 
 #     await update.message.reply_text(
@@ -153,18 +227,18 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     return LOCATION
 
 # THIS PART IS IMPORTANT. DON'T DELETE!!! #
-async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    """Stores the location and asks for some info about the user."""
-    user = update.message.from_user
-    user_location = update.message.location
-    logger.info(
-        "Location of %s: %f / %f", user.username, user_location.latitude, user_location.longitude
-    )
-    await update.message.reply_text(
-        "Thanks! Let me look for some yummy food near you."
-    )
+# async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+#     """Stores the location and asks for some info about the user."""
+#     user = update.message.from_user
+#     user_location = update.message.location
+#     logger.info(
+#         "Location of %s: %f / %f", user.username, user_location.latitude, user_location.longitude
+#     )
+#     await update.message.reply_text(
+#         "Thanks! Let me look for some yummy food near you."
+#     )
 
-    return
+#     return
 
 ###################
 
@@ -180,22 +254,30 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 def main() -> None:
     """Run the bot."""
-    # Create the Application and pass it your bot's token.
+    # Prod env token
     application = Application.builder().token("6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo").build()
+
+
+
+    # Test env token
+    # application = Application.builder().token("6566523234:AAGGe36r6_Bqis9BdxHHnRua0kSaBEc_OhQ").build()
 
     # Add conversation handler with the states GENDER, PHOTO, LOCATION and BIO
     conv_handler = ConversationHandler(
     entry_points=[CommandHandler("start", start)],
         states={
-            LOCATION: [
-                MessageHandler(filters.LOCATION, location),
+            # LOCATION: [
+            #     MessageHandler(filters.LOCATION, location),
+            # ],
+            SELECTION_1: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, selection_1),
             ],
             SELECTION_2: [
-                MessageHandler(filters.TEXT, selection_2),
+                MessageHandler(filters.TEXT & ~filters.COMMAND, selection_2),
+            ],
+            SELECTION_3: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, selection_3),
             ]
-            # SELECTION_2: [
-            #     MessageHandler(filters.TEXT, selection_2),
-            # ],
         },
         fallbacks=[CommandHandler("cancel", cancel)]
     )

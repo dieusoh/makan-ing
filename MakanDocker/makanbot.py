@@ -362,10 +362,10 @@ def main() -> None:
             ],
             SELECTION_3: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, selection_3),
-            ],
-            SURPRISE_ME_REPLY: [
-                MessageHandler(filters.TEXT & ~filters.COMMAND, surprise_me_reply),
             ]
+            # SURPRISE_ME_REPLY: [
+            #     MessageHandler(filters.TEXT & ~filters.COMMAND, surprise_me_reply),
+            # ]
         },
         fallbacks=[CommandHandler("cancel", cancel)]
     )

@@ -8,6 +8,14 @@
     # Find a list of food categories from Burpple
 
 
+#   ∧,,,∧
+#  (• ⩊ •) ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊
+# |￣U U￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣|
+# |       WELCOME TO DIEU'S CODE!      |
+# |           DON'T GET LOST           |
+# |                                    |
+# ￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣
+
 import logging
 
 from telegram import __version__ as TG_VER
@@ -43,7 +51,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
-GENDER, PHOTO, LOCATION, SELECTION_1, SELECTION_2, SELECTION_3 = range(6)
+GENDER, SURPRISE_ME_REPLY, LOCATION, SELECTION_1, SELECTION_2, SELECTION_3 = range(6)
 
 # ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
 # Define keyboards for food categories
@@ -70,7 +78,7 @@ reply_keyboard_3 = [
 
 next_reply = ("Here are more options!")
 
-back_reply = ("Let's backtrack!")
+back_reply = ("Let's backtrack.")
 
 surprise_reply = ("Don't worry, I'll look for something delicious for you! \n\n"
                           + "Send me your current location so that I look for some makan spots nearby (ﾉ´ヮ`)ﾉ*: ･ﾟ")
@@ -92,8 +100,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
         start_reply,
         reply_markup=ReplyKeyboardMarkup(
             reply_keyboard_1, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
-        )
-        
+        )  
     )
 
     return SELECTION_2
@@ -108,8 +115,8 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
     # user_location = update.message.location
-    print(user.username + "'s user choice = " + user_food_choice)
-    logger.info("User %s chose %s", user.username, user_food_choice)
+    print(user.first_name + "'s user choice = " + user_food_choice)
+    logger.info("User %s chose %s", user.first_name, user_food_choice)
 
 # IF user clicks on "Next" in selection_1, this flow will happen:
 # 2nd set of food categories
@@ -122,29 +129,35 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
                 reply_keyboard_2, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
             )
         )
+        return SELECTION_3
 
 # IF user clicks on "IDK, surprise me!" in selection_1, this flow will happen:
     elif user_food_choice == "IDK, surprise me!":
+        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)]]
         print('User clicked "IDK, surprise me!" in /start or selection_1')
 
         await update.message.reply_text (
-            surprise_reply
+            surprise_reply,
+            reply_markup=ReplyKeyboardMarkup(
+                location_keyboard, one_time_keyboard=True, input_field_placeholder="Send me your location! (Stalker vibes, jk)"
             )
-        ### !!! Need to have a next step. Close this loop.
-
+        )
+        return LOCATION
 
 # IF user clicks on any food categories from selection_1, this flow will happen:
     else:
         user_food_choice_reply = ("Ooh, that sounds delicious! \n\n"
                        + "Send me your current location so that I look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
+        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)]]
         print('User clicked any food category from selection_1 in /start or selection_1')
-        
-        await update.message.reply_text (
-            user_food_choice_reply
-            )
-        ### !!! Need to have a next step. Close this loop.
 
-    return SELECTION_3
+        await update.message.reply_text (
+            user_food_choice_reply,
+            reply_markup=ReplyKeyboardMarkup(
+                location_keyboard, one_time_keyboard=True, input_field_placeholder="Send me your location! (Stalker vibes, jk)"
+            )
+        )
+        return LOCATION
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
 
@@ -155,8 +168,7 @@ async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     user = update.message.from_user
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
-    # user_location = update.message.location
-    print(user.username + "'s user choice = " + user_food_choice)
+    print(user.first_name + "'s user choice = " + user_food_choice)
 
 # IF user clicks on "Next" in selection_2, this flow will happen:
 # 3rd set of food categories
@@ -186,23 +198,31 @@ async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 
 # If user clicks on "IDK, surprise me!" in selection_2, this flow will happen:
     elif user_food_choice == "IDK, surprise me!":
-        print('User clicked "IDK, surprise me!" in selection_2')
-        
-        await update.message.reply_text (
-            surprise_reply
+            location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)]]
+            print('User clicked "IDK, surprise me!" in /start or selection_2')
+
+            await update.message.reply_text (
+                surprise_reply,
+                reply_markup=ReplyKeyboardMarkup(
+                    location_keyboard, one_time_keyboard=True, input_field_placeholder="Send me your location! (Stalker vibes, jk)"
+                )
             )
-        ### !!! Need to have a next step. Close this loop.
+            return LOCATION
 
 # IF user clicks on any food categories from selection_2, this flow will happen:
     else:
         user_food_choice_reply = ("Ooh, that sounds delicious! \n\n"
                        + "Send me your current location so that I look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
-        print('User clicked any food category from selection_2 in selection_2')
-        
+        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)]]
+        print('User clicked any food category from selection_1 in /start or selection_2')
+
         await update.message.reply_text (
-            user_food_choice_reply
+            user_food_choice_reply,
+            reply_markup=ReplyKeyboardMarkup(
+                location_keyboard, one_time_keyboard=True, input_field_placeholder="Send me your location! (Stalker vibes, jk)"
             )
-        ### here is where i'll put return LOCATION
+        )
+        return LOCATION
 
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
@@ -214,8 +234,7 @@ async def selection_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     user = update.message.from_user
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
-    # user_location = update.message.location
-    print(user.username + "'s user choice = " + user_food_choice)
+    print(user.first_name + "'s user choice = " + user_food_choice)
 
 # IF user clicks "Next" on selection_3, this flow will happen:
 # Return to 1st set of food categories
@@ -243,84 +262,69 @@ async def selection_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
         
         return SELECTION_3
 
+# If user clicks on "IDK, surprise me!" in selection_3, this flow will happen:
+    elif user_food_choice == "IDK, surprise me!":
+            location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)]]
+            print('User clicked "IDK, surprise me!" in /start or selection_3')
+
+            await update.message.reply_text (
+                surprise_reply,
+                reply_markup=ReplyKeyboardMarkup(
+                    location_keyboard, one_time_keyboard=True, input_field_placeholder="Send me your location! (Stalker vibes, jk)"
+                )
+            )
+            return LOCATION
+
 # IF user clicks on any food categories from selection_3, this flow will happen:
     else:
         user_food_choice_reply = ("Ooh, that sounds delicious! \n\n"
                        + "Send me your current location so that I look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
+        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)]]
+        print('User clicked any food category from selection_1 in /start or selection_1')
+
         await update.message.reply_text (
-            user_food_choice_reply
+            user_food_choice_reply,
+            reply_markup=ReplyKeyboardMarkup(
+                location_keyboard, one_time_keyboard=True, input_field_placeholder="Send me your location! (Stalker vibes, jk)"
             )
+        )
+        return LOCATION
         
-    return SELECTION_2
+
+# 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
+
+# ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
+# Stores the location of the user when user clicks "Send current location" button
+async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    user = update.message.from_user
+    user_location = update.message.location
+    logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude)
+    print("User's latitude = " + str(user_location.latitude))
+    print("User's longitude = " + str(user_location.longitude))
+    
+    await update.message.reply_text(
+        "Thanks! Searching for some yummy food near you now."
+    )
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
 
 
 
 
-### CLEAN UP THE BELOW FLOW. Once we're done logging the food category from the user, we can work on getting nearby options with that category. ###
-
-
-
-
-
-# async def selection(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-#     """Reads the option selected by the user or gives more options."""
+# # ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
+# async def surprise_me_reply(update: Update,context: ContextTypes.DEFAULT_TYPE) -> int:
+#     print('User in surprise_me_reply')
 #     user = update.message.from_user
-#     user_food_choice = update.message.text
-#     user_location = update.message.location
-#     print ("user choice = " + user_food_choice)
-#     # logger.info(
-#     #     "Message  ", user_food_choice
-#     # )
+#     surprise_me_reply = ("How about...")
+#     location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)]]
 
-#     if user_food_choice == "More options":
-
-
-#     await update.message.reply_text(
-#         "Thanks! Let me look for some yummy food near you."
+#     await update.message.reply_text (
+#         surprise_me_reply,
+#         reply_markup=ReplyKeyboardMarkup(
+#             location_keyboard, one_time_keyboard=True, input_field_placeholder="Send me your location! (Stalker vibes, jk)"
+#         )
 #     )
 
-#     return LOCATION
-
-###############################
-
-
-
-
-    # Keyboard for user to send location -> Need to account for typing as well
-    reply_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)]]
-
-    start_reply = ("Hi " + first_name + "!"
-                   + " Let's look for some makan spots for you. \n\n"
-                   + "Send me your current location or where you plan to go."
-                   )
-    
-    await update.message.reply_text (
-        start_reply,
-        reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True, input_field_placeholder="Send me your location! (Stalker vibes, jk)"
-        )
-        
-    )
-
-    return LOCATION
-
-# THIS PART IS IMPORTANT. DON'T DELETE!!! #
-# async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-#     """Stores the location and asks for some info about the user."""
-#     user = update.message.from_user
-#     user_location = update.message.location
-#     logger.info(
-#         "Location of %s: %f / %f", user.username, user_location.latitude, user_location.longitude
-#     )
-#     await update.message.reply_text(
-#         "Thanks! Let me look for some yummy food near you."
-#     )
-
-#     return
-
-###################
 
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     """Cancels and ends the conversation."""
@@ -347,9 +351,9 @@ def main() -> None:
     conv_handler = ConversationHandler(
     entry_points=[CommandHandler("start", start)],
         states={
-            # LOCATION: [
-            #     MessageHandler(filters.LOCATION, location),
-            # ],
+            LOCATION: [
+                MessageHandler(filters.LOCATION, location),
+            ],
             SELECTION_1: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, selection_1),
             ],
@@ -358,6 +362,9 @@ def main() -> None:
             ],
             SELECTION_3: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, selection_3),
+            ],
+            SURPRISE_ME_REPLY: [
+                MessageHandler(filters.TEXT & ~filters.COMMAND, surprise_me_reply),
             ]
         },
         fallbacks=[CommandHandler("cancel", cancel)]

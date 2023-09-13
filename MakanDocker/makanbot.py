@@ -305,7 +305,7 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 async def about(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     print("User is in /about")
     ### !!! REWORK THIS MESSAGE IN THE FUTURE. Make it more concise. 
-    about_text = ("Hi, I'm the Makan-ing bot! I'm here to answer life's most difficult (and most frequently asked) question: <u><b>What should I eat today?</b></u> \n\n"
+    about_text = ("Hi, I'm the Makan-ing bot! 😄 I'm here to answer life's most difficult (and most frequently asked) question: <u><b>What should I eat today?</b></u> \n\n"
                   + "I can help: \n"
                   + "📍 <u>Find makan spots</u> based on your preferred cuisine and current location \n"
                   + "🍙 <u>Provide food recommendations</u> if you can't decide on what to eat \n\n"
@@ -335,13 +335,13 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 def main() -> None:
     """Run the bot."""
 # Prod env token
-    # application = Application.builder().token("6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo").build()
+    application = Application.builder().token("6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo").build()
         # TO DO:
             # If there's an error in prod env being set up, wait 20s then try again
             # Need to plan for a graceful failure
 
 # Test env token
-    application = Application.builder().token("6566523234:AAGGe36r6_Bqis9BdxHHnRua0kSaBEc_OhQ").build()
+    # application = Application.builder().token("6566523234:AAGGe36r6_Bqis9BdxHHnRua0kSaBEc_OhQ").build()
 
 # Add conversation handler with the states
     conv_handler = ConversationHandler(

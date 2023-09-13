@@ -335,13 +335,13 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 def main() -> None:
     """Run the bot."""
 # Prod env token
-    application = Application.builder().token("6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo").build()
+    # application = Application.builder().token("6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo").build()
         # TO DO:
             # If there's an error in prod env being set up, wait 20s then try again
             # Need to plan for a graceful failure
 
 # Test env token
-    # application = Application.builder().token("6566523234:AAGGe36r6_Bqis9BdxHHnRua0kSaBEc_OhQ").build()
+    application = Application.builder().token("6566523234:AAGGe36r6_Bqis9BdxHHnRua0kSaBEc_OhQ").build()
 
 # Add conversation handler with the states
     conv_handler = ConversationHandler(
@@ -360,12 +360,14 @@ def main() -> None:
                 MessageHandler(filters.TEXT & ~filters.COMMAND, selection_3),
             ]
         },
-        fallbacks=[CommandHandler("cancel", cancel)]
+        # Will probably not need the /cancel fallback command
+        # fallbacks=[CommandHandler("cancel", cancel)],
+        fallbacks=[CommandHandler("start", start)]
     )
 
 # Add commands to the telegram bot
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("cancel", cancel))
+    # application.add_handler(CommandHandler("start", start))
+    # application.add_handler(CommandHandler("cancel", cancel))
     application.add_handler(CommandHandler("about", about))
 
     application.add_handler(conv_handler)

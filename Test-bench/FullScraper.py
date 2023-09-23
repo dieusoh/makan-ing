@@ -1,4 +1,5 @@
 import requests
+import os
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 from urllib.parse import urljoin
@@ -37,7 +38,23 @@ def get_links(url):
     filtered_links = [link for link in links if link.startswith("https://www.burpple.com")]
 
     # Filter links to remove useless subdomains starting with "beyond" and "categories"
-    filtered_links = [link for link in filtered_links if not link.startswith("https://www.burpple.com/neighbourhoods") and not link.startswith("https://www.burpple.com/categories") if not link.startswith("https://www.burpple.com/list/") if not link.startswith("https://www.burpple.com/f/") if not link.startswith("https://www.burpple.com/@") if not link.startswith("https://www.burpple.com/about-us") if not link.startswith("https://www.burpple.com/newsroom")  if not link.startswith("https://www.burpple.com/careers") if not link.startswith("https://www.burpple.com/terms") if not link.startswith("https://www.burpple.com/search") if not link.startswith("https://www.burpple.com/features") if not link.startswith("https://www.burpple.com/sg/mobile") if not link.startswith("https://www.burpple.com/sg/beyond") if not link.startswith("https://www.burpple.com/sg/advertise") if not link.startswith("https://www.bites.burpple.com")]
+    filtered_links = [link for link in filtered_links 
+                      if not link.startswith("https://www.burpple.com/neighbourhoods") 
+                      if not link.startswith("https://www.burpple.com/categories") 
+                      if not link.startswith("https://www.burpple.com/list/") 
+                      if not link.startswith("https://www.burpple.com/f/") 
+                      if not link.startswith("https://www.burpple.com/@") 
+                      if not link.startswith("https://www.burpple.com/about-us") 
+                      if not link.startswith("https://www.burpple.com/newsroom")  
+                      if not link.startswith("https://www.burpple.com/careers") 
+                      if not link.startswith("https://www.burpple.com/terms") 
+                      if not link.startswith("https://www.burpple.com/search") 
+                      if not link.startswith("https://www.burpple.com/features") 
+                      if not link.startswith("https://www.burpple.com/sg/mobile") 
+                      if not link.startswith("https://www.burpple.com/sg/beyond") 
+                      if not link.startswith("https://www.burpple.com/sg/advertise") 
+                      if not link.startswith("https://www.bites.burpple.com")
+                      ]
 
     unique_links = list(set(filtered_links))
 
@@ -98,7 +115,7 @@ def get_restaurant_info(url):
         ## Geohash Coordinates
         GeohashBroad = geohash2.encode(Coordinates[1], Coordinates[0],precision = 5)
         GeohashPrecise = geohash2.encode(Coordinates[1], Coordinates[0], precision = 6)
-
+        
         # write to DynamoDB
         table.put_item(
             Item={
@@ -108,11 +125,15 @@ def get_restaurant_info(url):
                 'GeohashPrecise': GeohashPrecise,
                 'Neighbourhood': neighbourhood,
                 'Categories': categories,
-                'Primary category': 'French'
+                'Primary category': 'Thai',
+                'Latitude': Coordinates[1],
+                'Longitude': Coordinates[0]
             }
         )
-    except:
-        print(f"Error occurred")
+        print ('Wrote to table')
+    except Exception as error:
+        print(f"Error occurred writing to dynamoDB table")
+        print (error)
         return []
 
 
@@ -120,7 +141,7 @@ def get_restaurant_info(url):
 
 # url = "https://www.burpple.com/search/sg?q=Breakfast+%26+Brunch"
 base_url = 'https://www.burpple.com/search/sg?offset='
-category = 'Breakfast+%26+Brunch'
+category = 'Thai'
 offset = 0
 limit = 2500  # Set the limit of results you want to scrape
 

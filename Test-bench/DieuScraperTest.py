@@ -18,7 +18,6 @@ als = session.client('location')
 # table = ddb.Table('Locations')
 # als = boto3.client('location')
 
-Categories = ["Burgers", "Cafes", "Chinese", "French", "Halal", "Hawker Food", "Indian", "Italian", "Japanese", "Korean", "Malay", "Mediterranean", "Mexican", "Pasta", "Pizza", "Ramen", "Salads", "Spanish"]
 
 def get_links(url):
     url=url
@@ -40,7 +39,7 @@ def get_links(url):
     links = [link for link in links if link is not None]
     # print (links)
 
-    # link for the next page
+    # Link for the next page
     more_options = [link for link in links if link.startswith("https://www.burpple.com/search/sg?offset")]
 
     # Filter links to remove non-Burpple links
@@ -85,13 +84,14 @@ def get_restaurant_info(url):
         address = address.get('data-venue-address')
         # print (address)
 
-        # Get price tag (if available)
+        # Get price (if available)
         try:
-            pricetag = soup.find('div', class_='venue-area-price')
+            pricetag = soup.find('div', class_='venue-price')
         except:
             pricetag = 'Unknown'
         # Extract the text from the element
         price = pricetag.get_text(strip=True)
+        # print (price)
 
         # Get categories
         tags = soup.find('div', class_='venue-tags')
@@ -119,7 +119,7 @@ def get_restaurant_info(url):
         GeohashBroad = geohash2.encode(Coordinates[1], Coordinates[0],precision = 5)
         GeohashPrecise = geohash2.encode(Coordinates[1], Coordinates[0], precision = 6)
 
-        # write to DynamoDB
+        # Write to DynamoDB
         table.put_item(
             Item={
                 'Geohash': GeohashBroad,
@@ -129,10 +129,9 @@ def get_restaurant_info(url):
                 'Neighbourhood': neighbourhood,
                 'Price': price,
                 'Categories': categories,
-                'Primary category': 'Thai',
                 'Latitude': str(Coordinates[1]),
                 'Longitude': str(Coordinates[0])
-            }
+                }
         )
         print ('Wrote to table')
     except Exception as error:
@@ -140,29 +139,33 @@ def get_restaurant_info(url):
         print (error)
         return []
 
+def main(category):
+    base_url = 'https://www.burpple.com/search/sg?offset='
+    category = category
+    offset = 0
+    limit = 10000
+    print(category)
 
-## Main function
+    while offset < limit:
+        url = f'{base_url}{offset}&open_now=false&price_from=0&price_to=90&q={category}'
+        try:
+            print ("Getting links for page " + str(url))
+            Links = get_links(url)
+            # url = Links[0]
+            # print ("Next page = " + str(url))
+            Restaurants = Links[1]
+            for restaurant in Restaurants:
+                get_restaurant_info(restaurant)
+            offset += 12  # Increment the offset value by 12 for the next page
+            print (offset)
 
-# url = "https://www.burpple.com/search/sg?q=Breakfast+%26+Brunch"
-base_url = 'https://www.burpple.com/search/sg?offset='
-category = 'Thai'
-offset = 0
-limit = 2500  # Set the limit of results you want to scrape
+        except requests.exceptions.RequestException as e:
+            print(f"Error occurred: {e}")
+            break
 
-while offset < limit:
-    url = f'{base_url}{offset}&open_now=false&price_from=0&price_to=90&q={category}'
-    try:
-        print ("Getting links for page " + str(url))
-        Links = get_links(url)
-        # url = Links[0]
-        # print ("Next page = " + str(url))
-        Restaurants = Links[1]
-        for restaurant in Restaurants:
-            get_restaurant_info(restaurant)
-        offset += 12  # Increment the offset value by 12 for the next page
-        print (offset)
+Categories = ["Burgers", "Cafes", "Chinese", "French", "Halal", "Hawker Food", "Indian", "Italian", "Japanese", "Korean", "Malay", "Mediterranean", "Mexican", "Pasta", "Pizza", "Ramen", "Salads", "Spanish"]
+for category in Categories:
+    main(category)
 
-    except requests.exceptions.RequestException as e:
-        print(f"Error occurred: {e}")
-        break
-
+# link = 'https://www.burpple.com/yoons-social-kitchen-by-yoons-traditional-teochew-kueh'
+# get_restaurant_info(link)

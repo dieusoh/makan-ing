@@ -5,6 +5,12 @@ table = ddb.Table('Locations')
 als = boto3.client('location')
 from boto3.dynamodb.conditions import Key
 
+## For windows client
+session = boto3.Session(profile_name='makaning')
+ddb = session.resource('dynamodb', region_name='ap-southeast-1')
+table = ddb.Table('Locations')
+als = session.client('location')
+
 ## A function that receives the longitude and latitude of a location and returns the geohash of the location at precision of 5
 def get_geohash(lat, lon):
     return geohash2.encode(lat, lon, precision=5)

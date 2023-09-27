@@ -6,9 +6,17 @@ from urllib.parse import urljoin
 import boto3
 import geohash2
 from decimal import Decimal
-ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
+
+## For windows client
+session = boto3.Session(profile_name='makaning')
+ddb = session.resource('dynamodb', region_name='ap-southeast-1')
 table = ddb.Table('Locations')
-als = boto3.client('location')
+als = session.client('location')
+
+## For mac client
+# ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
+# table = ddb.Table('Locations')
+# als = boto3.client('location')
 
 Categories = ["Japanese", "Chinese", "Desserts", "French", "Western", "Malay", "Breakfast+%26+Brunch"]
 

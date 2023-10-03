@@ -7,7 +7,7 @@
 # ￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣
 
 import logging
-from GetRestaurant import *
+
 from telegram import __version__ as TG_VER
 
 try:

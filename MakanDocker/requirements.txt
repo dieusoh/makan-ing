@@ -1,1 +1,4 @@
 python-telegram-bot
+geohash2
+boto3
+random

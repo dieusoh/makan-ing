@@ -30,10 +30,15 @@ specific_links_to_exclude = [
 ]
 
 def get_links(url):
-    url=url
-    req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-    web_byte = urlopen(req).read()
-
+    while True:
+        try:
+            url=url
+            req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            web_byte = urlopen(req).read()
+            break
+        except:
+            time.sleep(2)
+    
     webpage = web_byte.decode('utf-8')
     # Parse the HTML content using BeautifulSoup
     soup = BeautifulSoup(webpage, 'html.parser')
@@ -160,22 +165,25 @@ def main(category):
 
     while offset < limit:
         url = f'{base_url}{offset}&open_now=false&price_from=0&price_to=90&q={category}'
-        try:
-            print ("Getting links for page " + str(url))
-            Links = get_links(url)
-            # url = Links[0]
-            # print ("Next page = " + str(url))
-            Restaurants = Links[1]
-            for restaurant in Restaurants:
-                get_restaurant_info(restaurant)
-            offset += 10  # Increment the offset value by 10 for the next page
-            print (offset)
+        while True:
+            try:
+                print ("Getting links for page " + str(url))
+                Links = get_links(url)
+                # url = Links[0]
+                # print ("Next page = " + str(url))
+                Restaurants = Links[1]
+                for restaurant in Restaurants:
+                    get_restaurant_info(restaurant)
+                offset += 10  # Increment the offset value by 10 for the next page
+                print (offset)
+                break
 
-        except requests.exceptions.RequestException as e:
-            print(f"Error occurred: {e}")
-            time.sleep(2)
+            except:
+                time.sleep(2)
 
-Categories = ["Chinese", "French", "Halal", "Hawker Food", "Indian", "Italian", "Japanese", "Korean", "Malay", "Mediterranean", "Mexican", "Pasta", "Pizza", "Ramen", "Salads", "Spanish"]
+# Categories = ["French", "Halal", "Hawker Food", "Indian", "Italian", "Japanese", "Korean", "Malay", "Mediterranean", "Mexican", "Pasta", "Pizza", "Ramen", "Salads", "Spanish"]
+
+Categories = ["Indian", "Italian", "Japanese", "Korean", "Malay", "Mediterranean", "Mexican", "Pasta", "Pizza", "Ramen", "Salads", "Spanish"]
 for category in Categories:
     main(category)
 

@@ -6,6 +6,8 @@ from urllib.parse import urljoin
 import boto3
 import geohash2
 from decimal import Decimal
+import time
+import random
 
 ## For windows client
 session = boto3.Session(profile_name='makaning')
@@ -133,39 +135,102 @@ def get_restaurant_info(url):
                 'Longitude': str(Coordinates[0])
                 }
         )
-        print ('Wrote to table')
+        print ("Succesfully wrote to dynamoDB table")
     except Exception as error:
         print(f"Error occurred writing to dynamoDB table")
         print (error)
         return []
 
+### CHATGPT
 def main(category):
     base_url = 'https://www.burpple.com/search/sg?offset='
     category = category
     offset = 0
-    limit = 10000
+    limit = 5000
     print(category)
 
     while offset < limit:
         url = f'{base_url}{offset}&open_now=false&price_from=0&price_to=90&q={category}'
         try:
-            print ("Getting links for page " + str(url))
+            print("Getting links for page " + str(url))
             Links = get_links(url)
-            # url = Links[0]
-            # print ("Next page = " + str(url))
             Restaurants = Links[1]
             for restaurant in Restaurants:
-                get_restaurant_info(restaurant)
-            offset += 12  # Increment the offset value by 12 for the next page
-            print (offset)
+                retries = 5
+                x = 0
+                while x < retries:
+                    try:
+                        get_restaurant_info(restaurant)
+                        time.sleep(2)
+                        print(offset)
+                        break  # Break the retry loop if successful
+                    except requests.exceptions.RequestException as e:
+                        print(f"Error occurred: {e}")
+                        x += 1  # Increase the retry count
+                        if x < retries:
+                            sleep = (2 ** x) + random.uniform(0, 1)
+                            print(f"Retrying in {sleep} seconds...")
+                            time.sleep(sleep)
+                        else:
+                            raise  # Raise the exception if retries are exhausted
+                offset += 1  # Increment the offset value by 12 for the next page
 
         except requests.exceptions.RequestException as e:
             print(f"Error occurred: {e}")
             break
 
-Categories = ["Burgers", "Cafes", "Chinese", "French", "Halal", "Hawker Food", "Indian", "Italian", "Japanese", "Korean", "Malay", "Mediterranean", "Mexican", "Pasta", "Pizza", "Ramen", "Salads", "Spanish"]
+Categories = ["Cafes", "Chinese", "French", "Halal", "Hawker Food", "Indian", "Italian", "Japanese", "Korean", "Malay", "Mediterranean", "Mexican", "Pasta", "Pizza", "Ramen", "Salads", "Spanish"]
 for category in Categories:
     main(category)
+
+
+
+
+### ORIGINAL
+# def main(category):
+#     base_url = 'https://www.burpple.com/search/sg?offset='
+#     category = category
+#     offset = 0
+#     limit = 5000
+#     print(category)
+
+#     while offset < limit:
+#         url = f'{base_url}{offset}&open_now=false&price_from=0&price_to=90&q={category}'
+#         try:
+#             print ("Getting links for page " + str(url))
+#             Links = get_links(url)
+#             # url = Links[0]
+#             # print ("Next page = " + str(url))
+#             Restaurants = Links[1]
+#             for restaurant in Restaurants:
+#                 retries = 5, 
+#                 backoff_in_seconds = 1
+#                 x = 0
+#                 try:
+#                     get_restaurant_info(restaurant)
+#                     time.sleep(2)
+#                     offset += 12  # Increment the offset value by 12 for the next page
+#                     print (offset)
+#                 except:
+#                     if x == retries:
+#                         raise
+
+#                     sleep = (backoff_in_seconds * 2 ** x + 
+#                             random.uniform(0, 1))
+#                     time.sleep(sleep)
+#                     x += 1
+
+                
+
+#         except requests.exceptions.RequestException as e:
+#             print(f"Error occurred: {e}")
+#             break
+
+# Categories = ["Burgers", "Cafes", "Chinese", "French", "Halal", "Hawker Food", "Indian", "Italian", "Japanese", "Korean", "Malay", "Mediterranean", "Mexican", "Pasta", "Pizza", "Ramen", "Salads", "Spanish"]
+# Categories = ["Cafes", "Chinese", "French", "Halal", "Hawker Food", "Indian", "Italian", "Japanese", "Korean", "Malay", "Mediterranean", "Mexican", "Pasta", "Pizza", "Ramen", "Salads", "Spanish"]
+# for category in Categories:
+#     main(category)
+
 
 # link = 'https://www.burpple.com/yoons-social-kitchen-by-yoons-traditional-teochew-kueh'
 # get_restaurant_info(link)

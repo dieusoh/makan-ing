@@ -7,7 +7,7 @@
 # ￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣
 
 import logging
-
+from GetRestaurant import *
 from telegram import __version__ as TG_VER
 
 try:
@@ -112,6 +112,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     print('User in selection_2')
     user = update.message.from_user
+    global user_food_choice
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
     print(user.first_name + "'s user choice = " + user_food_choice)
@@ -165,6 +166,7 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 # ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
 async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     print('User in selection_3')
+    global user_food_choice
     user = update.message.from_user
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
@@ -232,6 +234,7 @@ async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 async def selection_4(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     print('User in selection_4')
     user = update.message.from_user
+    global user_food_choice
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
     print(user.first_name + "'s user choice = " + user_food_choice)
@@ -299,6 +302,7 @@ async def selection_4(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 async def selection_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     print('User in selection 1')
     user = update.message.from_user
+    global user_food_choice
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
     print(user.first_name + "'s user choice = " + user_food_choice)
@@ -384,8 +388,13 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         print("User's latitude = " + str(user_location.latitude))
         print("User's longitude = " + str(user_location.longitude))
 
+        user_latitude = user_location.latitude
+        user_longitude = user_location.longitude
+        user_geohash = get_geohash(user_latitude, user_longitude)
+        food_options = find_food(user_geohash, user_food_choice)
+
         await update.message.reply_text(
-        "Thanks! Searching for some yummy food near you now."
+        food_options
         )
         # RETURN X
 
@@ -401,7 +410,8 @@ async def about(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
                   + "I can help: \n"
                   + "📍 <u>Find makan spots</u> based on your preferred cuisine and current location \n"
                   + "🍙 <u>Provide food recommendations</u> if you can't decide on what to eat \n\n"
-                  + "Just ask me, and I'll help you discover your next delicious meal!"
+                  + "Just type /start or select it from the menu bar, and I'll help you discover your next delicious meal! \n\n"
+
     )
     await update.message.reply_text(
         about_text, parse_mode=ParseMode.HTML, reply_markup=ReplyKeyboardRemove()
@@ -409,6 +419,7 @@ async def about(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     return ConversationHandler.END
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
+
 
 # ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
 # Cancels and ends the conversation when user uses /cancel
@@ -440,8 +451,8 @@ def main() -> None:
     entry_points=[CommandHandler("start", start)],
         states={
             LOCATION: [
-                MessageHandler(filters.LOCATION, location),
-                MessageHandler(filters.TEXT, location),
+                MessageHandler(filters.LOCATION & ~filters.COMMAND, location),
+                MessageHandler(filters.TEXT & ~filters.COMMAND, location),
             ],
             SELECTION_1: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, selection_1),
@@ -465,6 +476,7 @@ def main() -> None:
     # application.add_handler(CommandHandler("start", start))
     # application.add_handler(CommandHandler("cancel", cancel))
     application.add_handler(CommandHandler("about", about))
+    # application.add_handler(CommandHandler("feedback", feedback))
 
     application.add_handler(conv_handler)
 

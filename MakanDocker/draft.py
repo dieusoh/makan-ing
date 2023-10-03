@@ -388,8 +388,13 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         print("User's latitude = " + str(user_location.latitude))
         print("User's longitude = " + str(user_location.longitude))
 
+        user_latitude = user_location.latitude
+        user_longitude = user_location.longitude
+        user_geohash = get_geohash(user_latitude, user_longitude)
+        food_options = find_food(user_geohash, user_food_choice)
+
         await update.message.reply_text(
-        "Thanks! Searching for some yummy food near you now."
+        food_options
         )
         # RETURN X
 
@@ -446,8 +451,8 @@ def main() -> None:
     entry_points=[CommandHandler("start", start)],
         states={
             LOCATION: [
-                MessageHandler(filters.LOCATION, location),
-                MessageHandler(filters.TEXT, location),
+                MessageHandler(filters.LOCATION & ~filters.COMMAND, location),
+                MessageHandler(filters.TEXT & ~filters.COMMAND, location),
             ],
             SELECTION_1: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, selection_1),
@@ -471,7 +476,7 @@ def main() -> None:
     # application.add_handler(CommandHandler("start", start))
     # application.add_handler(CommandHandler("cancel", cancel))
     application.add_handler(CommandHandler("about", about))
-    application.add_handler(CommandHandler("feedback", feedback))
+    # application.add_handler(CommandHandler("feedback", feedback))
 
     application.add_handler(conv_handler)
 

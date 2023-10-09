@@ -47,6 +47,22 @@ def get_category_list(geohash, category):
             except:
                 print ("Restaurant does not match user's food choice")
 
+    elif category == "Hawker Food":
+        for restaurant in restaurant_list:
+            try:
+                if "Hawker-fare" in restaurant['Categories']:
+                    same_category_list.append(restaurant)
+            except:
+                print ("Restaurant does not match user's food choice")
+    
+    elif category == "Cafes":
+        for restaurant in restaurant_list:
+            try:
+                if "Cafes & Coffee" in restaurant['Categories']:
+                    same_category_list.append(restaurant)
+            except:
+                print ("Restaurant does not match user's food choice")
+
     else:
         for restaurant in restaurant_list:
             try:

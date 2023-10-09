@@ -26,7 +26,7 @@ output_list = [
 ]
 formatted_data = ""
 for i, restaurant in enumerate(output_list, 1):
-    formatted_data += f"{i}.{restaurant['Name']}\n"
+    formatted_data += f"{i}. {restaurant['Name']}\n"
     formatted_data += f"Address: {restaurant['Address']}\n"
     if 'Price' in restaurant:
         formatted_data += f"Price: {restaurant['Price']}\n"

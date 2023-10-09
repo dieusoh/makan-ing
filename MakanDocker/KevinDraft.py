@@ -433,7 +433,7 @@ def main() -> None:
             # Need to plan for a graceful failure
 
 # Test env token
-    application = Application.builder().token("6566523234:AAGGe36r6_Bqis9BdxHHnRua0kSaBEc_OhQ").build()
+    application = Application.builder().token("6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk").build()
 
 # Add conversation handler with the states
     conv_handler = ConversationHandler(

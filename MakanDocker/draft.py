@@ -391,7 +391,7 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         user_latitude = user_location.latitude
         user_longitude = user_location.longitude
         user_geohash = get_geohash(user_latitude, user_longitude)
-        food_options = find_food(user_geohash, user_food_choice)
+        food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
 
         await update.message.reply_text(
         food_options

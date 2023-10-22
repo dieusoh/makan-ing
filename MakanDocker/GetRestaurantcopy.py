@@ -45,23 +45,8 @@ def get_category_list(geohash, category):
             try:
                 same_category_list.append(restaurant)
             except:
-                print ("Restaurant does not match user's food choice")
-
-    elif category == "Hawker Food":
-        for restaurant in restaurant_list:
-            try:
-                if "Hawker-fare" in restaurant['Categories']:
-                    same_category_list.append(restaurant)
-            except:
-                print ("Restaurant does not match user's food choice")
-    
-    elif category == "Cafes":
-        for restaurant in restaurant_list:
-            try:
-                if "Cafes & Coffee" in restaurant['Categories']:
-                    same_category_list.append(restaurant)
-            except:
-                print ("Restaurant does not match user's food choice")
+                # print ("Restaurant does not match user's food choice")
+                pass
 
     else:
         for restaurant in restaurant_list:
@@ -69,7 +54,8 @@ def get_category_list(geohash, category):
                 if category in restaurant['Categories']:
                     same_category_list.append(restaurant)
             except:
-                print ("Restaurant does not match user's food choice")
+                # print ("Restaurant does not match user's food choice")
+                pass
     
     return same_category_list
 
@@ -101,14 +87,14 @@ def get_restaurant_info(restaurant_list):
 ## function that is given the user's curreent coordinates and the restaurant's coordinates and is calculates the time taken to walk between them. 
 
 def food_distance (user_lat, user_long, restaurant_lat, restaurant_long):
-    print ('in food distance')
+    # print ('in food distance')
     response = als.calculate_route(
         CalculatorName = 'GrabCalculator',
         DeparturePosition=[user_long, user_lat],
         DestinationPosition=[restaurant_long, restaurant_lat],
         TravelMode='Walking'
     )
-    print (response)
+    # print (response)
     Distance = response['Summary']['Distance']
     Duration = response['Summary']['DurationSeconds']
     return [Duration, Distance]
@@ -127,39 +113,48 @@ def split_list(list_to_split, current_index):
 
 def find_food(geohash, category, user_lat, user_long):
     # Get all the restaurants in the general area
-    print ('in find food')
+    # print ('in find food')
     restaurant_list = get_category_list(geohash, category)
     restaurant_list = get_restaurant_info(restaurant_list)
     nearby_list = []
+    random.shuffle(restaurant_list)
     for restaurant in restaurant_list:
-        print (restaurant)
+        # print (restaurant)
         if restaurant['Restaurant_lat'] == None:
-            print ('restaurant lat is none')
+            pass
         else:
-            print ('searching for distance') 
-            restaurant_lat = float(45.23)
+            # print (x)
+            # x+=1
+            # print ('searching for distance') 
             restaurant_lat = float(restaurant['Restaurant_lat'])
             restaurant_long = float(restaurant['Restaurant_long'])
-            print (restaurant_lat)
-            print (type(restaurant_lat))
-            print (restaurant_long)
+            # print (restaurant_lat)
+            # print (type(restaurant_lat))
+            # print (restaurant_long)
             duration = food_distance (user_lat, user_long, restaurant_lat, restaurant_long)
             duration = duration[0]
-            print ("travel time is " + duration)
+            # print ("travel time is " + str(duration))
             if duration < 600:
                 nearby_list.append(restaurant)
+                if len(nearby_list) == 5:
+                    break
+                # print ('adding to list')
                    
-    random.shuffle(nearby_list)
     output_list = split_list(nearby_list,0)
+    if output_list:
+        formatted_data = ""
+        for i, restaurant in enumerate(output_list, 1):
+            formatted_data += f"{i}. {restaurant['Name']}\n"
+            formatted_data += f"Address: {restaurant['Address']}\n"
+            travel_time = divmod(duration, 60)
+            travel_time = int(travel_time[0])
+            formatted_data += f"About {travel_time} minutes to walk there\n"
+            if 'Price' in restaurant:
+                if restaurant['Price'] != 'Know the average price?':
+                    formatted_data += f"Price: {restaurant['Price']}\n"
+            formatted_data += "\n"  # Add a blank line between restaurants
+        print(formatted_data)
+    else:
+        formatted_data = "Sorry, there's no food near you that fits the category!"
 
-    
-    formatted_data = ""
-    for i, restaurant in enumerate(output_list, 1):
-        formatted_data += f"{i}. {restaurant['Name']}\n"
-        formatted_data += f"Address: {restaurant['Address']}\n"
-        if 'Price' in restaurant:
-            if restaurant['Price'] != 'Know the average price?':
-                formatted_data += f"Price: {restaurant['Price']}\n"
-        formatted_data += "\n"  # Add a blank line between restaurants
-    print(formatted_data)
     return formatted_data

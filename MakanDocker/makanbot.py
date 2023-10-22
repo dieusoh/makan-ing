@@ -7,7 +7,7 @@
 # ￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣
 
 import logging
-from GetRestaurant import *
+from GetRestaurantcopy import *
 from telegram import __version__ as TG_VER
 
 try:
@@ -368,6 +368,8 @@ async def selection_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 # ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
 # Stores the location of the user when user clicks "Send current location" button
 async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    print ('In Location')
+    print ('------------')
     user = update.message.from_user
     user_location = update.message.location
     user_location_choice = update.message.text
@@ -384,14 +386,14 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         return SELECTION_2
     
     else:
+        print ('Searchinf for food')
         logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude)
-        print("User's latitude = " + str(user_location.latitude))
-        print("User's longitude = " + str(user_location.longitude))
-
-        user_latitude = user_location.latitude
-        user_longitude = user_location.longitude
+        user_latitude = (user_location.latitude)
+        user_longitude = (user_location.longitude)
+        print("User's latitude = " + str(user_latitude))
+        print("User's longitude = " + str(user_longitude))
         user_geohash = get_geohash(user_latitude, user_longitude)
-        food_options = find_food(user_geohash, user_food_choice)
+        food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
 
         await update.message.reply_text(
         food_options
@@ -440,11 +442,11 @@ def main() -> None:
 # Prod env token
     application = Application.builder().token("6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo").build()
         # TO DO:
-            # If there's an error in prod env being set up, wait 20s then try again
-            # Need to plan for a graceful failure
+        #     If there's an error in prod env being set up, wait 20s then try again
+        #     Need to plan for a graceful failure
 
-# Test env token
-    # application = Application.builder().token("6566523234:AAGGe36r6_Bqis9BdxHHnRua0kSaBEc_OhQ").build()
+# # Test env token
+    # application = Application.builder().token("6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk").build()
 
 # Add conversation handler with the states
     conv_handler = ConversationHandler(

@@ -45,7 +45,8 @@ def get_category_list(geohash, category):
             try:
                 same_category_list.append(restaurant)
             except:
-                print ("Restaurant does not match user's food choice")
+                # print ("Restaurant does not match user's food choice")
+                pass
 
     else:
         for restaurant in restaurant_list:
@@ -53,7 +54,8 @@ def get_category_list(geohash, category):
                 if category in restaurant['Categories']:
                     same_category_list.append(restaurant)
             except:
-                print ("Restaurant does not match user's food choice")
+                # print ("Restaurant does not match user's food choice")
+                pass
     
     return same_category_list
 
@@ -139,18 +141,20 @@ def find_food(geohash, category, user_lat, user_long):
                 # print ('adding to list')
                    
     output_list = split_list(nearby_list,0)
+    if output_list:
+        formatted_data = ""
+        for i, restaurant in enumerate(output_list, 1):
+            formatted_data += f"{i}. {restaurant['Name']}\n"
+            formatted_data += f"Address: {restaurant['Address']}\n"
+            travel_time = divmod(duration, 60)
+            travel_time = int(travel_time[0])
+            formatted_data += f"About {travel_time} minutes to walk there\n"
+            if 'Price' in restaurant:
+                if restaurant['Price'] != 'Know the average price?':
+                    formatted_data += f"Price: {restaurant['Price']}\n"
+            formatted_data += "\n"  # Add a blank line between restaurants
+        print(formatted_data)
+    else:
+        formatted_data = "Sorry, there's no food near you that fits the category!"
 
-    
-    formatted_data = ""
-    for i, restaurant in enumerate(output_list, 1):
-        formatted_data += f"{i}. {restaurant['Name']}\n"
-        formatted_data += f"Address: {restaurant['Address']}\n"
-        travel_time = divmod(duration, 60)
-        travel_time = int(travel_time[0])
-        formatted_data += f"About {travel_time} minutes to walk there\n"
-        if 'Price' in restaurant:
-            if restaurant['Price'] != 'Know the average price?':
-                formatted_data += f"Price: {restaurant['Price']}\n"
-        formatted_data += "\n"  # Add a blank line between restaurants
-    print(formatted_data)
     return formatted_data

@@ -9,7 +9,7 @@ from decimal import Decimal
 import time
 
 ## For windows client
-session = boto3.Session(profile_name='makaning')
+session = boto3.Session(profile_name='makaning-2')
 ddb = session.resource('dynamodb', region_name='ap-southeast-1')
 table = ddb.Table('Locations')
 als = session.client('location')

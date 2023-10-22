@@ -5,7 +5,6 @@ table = ddb.Table('Locations')
 als = boto3.client('location')
 from boto3.dynamodb.conditions import Key
 import random
-import datetime
 
 # For windows client
 # session = boto3.Session(profile_name='makaning')

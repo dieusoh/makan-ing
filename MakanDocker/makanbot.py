@@ -42,7 +42,7 @@ logging.getLogger("httpx").setLevel(logging.WARNING)
 
 logger = logging.getLogger(__name__)
 
-LOCATION, SELECTION_1, SELECTION_2, SELECTION_3, SELECTION_4 = range(5)
+LOCATION, SELECTION_1, SELECTION_2, SELECTION_3, SELECTION_4, RANDOM = range(6)
 
 # ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
 # Define keyboards for food categories
@@ -79,7 +79,7 @@ next_reply = ("Here are more options!")
 back_reply = ("Let's backtrack.")
 
 surprise_reply = ("Don't worry, I'll look for something delicious for you! \n\n"
-                          + "Send me your current location so that I look for some makan spots nearby (ﾉ´ヮ`)ﾉ*: ･ﾟ")
+                          + "Send me your current location so that I can look for some makan spots nearby (ﾉ´ヮ`)ﾉ*: ･ﾟ")
 
 back_to_food_categories_reply = ("Sure! Let's pick something else.")
 
@@ -133,7 +133,7 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 
 # IF user clicks on "IDK, surprise me!" in selection_1, this flow will happen:
     elif user_food_choice == "IDK, surprise me!":
-        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories")]]
+        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
         print('User clicked "IDK, surprise me!" in /start or selection_1')
 
         await update.message.reply_text (
@@ -147,8 +147,8 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 # IF user clicks on any food categories from selection_1, this flow will happen:
     else:
         user_food_choice_reply = ("Ooh, that sounds delicious! \n\n"
-                       + "Send me your current location so that I look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
-        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories")]]
+                       + "Send me your current location so that I can look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
+        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
         print('User clicked any food category from selection_1 in /start or selection_1')
 
         await update.message.reply_text (
@@ -200,7 +200,7 @@ async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 
 # If user clicks on "IDK, surprise me!" in selection_2, this flow will happen:
     elif user_food_choice == "IDK, surprise me!":
-            location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories")]]
+            location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
             print('User clicked "IDK, surprise me!" in /start or selection_2')
 
             await update.message.reply_text (
@@ -214,8 +214,8 @@ async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 # IF user clicks on any food categories from selection_2, this flow will happen:
     else:
         user_food_choice_reply = ("Ooh, that sounds delicious! \n\n"
-                       + "Send me your current location so that I look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
-        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories")]]
+                       + "Send me your current location so that I can look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
+        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
         print('User clicked any food category from selection_1 in /start or selection_2')
 
         await update.message.reply_text (
@@ -267,7 +267,7 @@ async def selection_4(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 
 # If user clicks on "IDK, surprise me!" in selection_2, this flow will happen:
     elif user_food_choice == "IDK, surprise me!":
-            location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories")]]
+            location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
             print('User clicked "IDK, surprise me!" in /start or selection_2')
 
             await update.message.reply_text (
@@ -281,8 +281,8 @@ async def selection_4(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 # IF user clicks on any food categories from selection_2, this flow will happen:
     else:
         user_food_choice_reply = ("Ooh, that sounds delicious! \n\n"
-                       + "Send me your current location so that I look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
-        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories")]]
+                       + "Send me your current location so that I can look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
+        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
         print('User clicked any food category from selection_1 in /start or selection_2')
 
         await update.message.reply_text (
@@ -335,7 +335,7 @@ async def selection_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 
 # If user clicks on "IDK, surprise me!" in selection_3, this flow will happen:
     elif user_food_choice == "IDK, surprise me!":
-            location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories")]]
+            location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
             print('User clicked "IDK, surprise me!" in /start or selection_3')
 
             await update.message.reply_text (
@@ -349,8 +349,8 @@ async def selection_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 # IF user clicks on any food categories from selection_3, this flow will happen:
     else:
         user_food_choice_reply = ("Ooh, that sounds delicious! \n\n"
-                       + "Send me your current location so that I look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
-        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories")]]
+                       + "Send me your current location so that I can look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
+        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
         print('User clicked any food category from selection_1 in /start or selection_1')
 
         await update.message.reply_text (
@@ -373,8 +373,8 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     user_location = update.message.location
     user_location_choice = update.message.text
-    
-    if user_location_choice == "Back to food categories":
+
+    if user_location_choice == "Back to food categories 🥢":
         print('User chose to go back to food categories')
 
         await update.message.reply_text(
@@ -386,19 +386,66 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         return SELECTION_2
     
     else:
-        print ('Searchinf for food')
+        print ('Searching for food')
         logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude)
+        global user_latitude
+        global user_longitude
         user_latitude = (user_location.latitude)
         user_longitude = (user_location.longitude)
         print("User's latitude = " + str(user_latitude))
         print("User's longitude = " + str(user_longitude))
         user_geohash = get_geohash(user_latitude, user_longitude)
         food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
+        random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="Back to food categories 🥢")]]
 
         await update.message.reply_text(
-        food_options
+        food_options,
+            reply_markup=ReplyKeyboardMarkup(
+                random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+            )
         )
-        # RETURN X
+        return RANDOM
+
+# 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
+
+
+# ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
+
+async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    print ('In random')
+    user = update.message.from_user
+    user_location = update.message.location
+    user_location_choice = update.message.text
+
+    if user_location_choice == "Back to food categories 🥢":
+        print('User chose to go back to food categories')
+
+        await update.message.reply_text(
+        back_to_food_categories_reply,
+            reply_markup=ReplyKeyboardMarkup(
+                reply_keyboard_1, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+            )
+        )
+        return SELECTION_2
+
+    else:
+        print ('Searching for food2')
+        # logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude)
+        # user_latitude = (user_location.latitude)
+        # user_longitude = (user_location.longitude)
+        # print("User's latitude = " + str(user_latitude))
+        # print("User's longitude = " + str(user_longitude))
+        user_geohash = get_geohash(user_latitude, user_longitude)
+        food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
+        random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="Back to food categories 🥢")]]
+
+        await update.message.reply_text(
+        food_options,
+            reply_markup=ReplyKeyboardMarkup(
+                random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+            )
+        )
+        return RANDOM
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
 
@@ -467,6 +514,10 @@ def main() -> None:
             ],
             SELECTION_4: [
                 MessageHandler(filters.TEXT & ~filters.COMMAND, selection_4),
+            ],
+            RANDOM: [
+                MessageHandler(filters.LOCATION & ~filters.COMMAND, random),
+                MessageHandler(filters.TEXT & ~filters.COMMAND, random),
             ]
         },
         # Will probably not need the /cancel fallback command

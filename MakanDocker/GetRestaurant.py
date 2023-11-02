@@ -7,15 +7,15 @@ from boto3.dynamodb.conditions import Key
 import random
 
 # For windows client
-# session = boto3.Session(profile_name='makaning')
-# ddb = session.resource('dynamodb', region_name='ap-southeast-1')
-# table = ddb.Table('Locations')
-# als = session.client('location')
-
-## For mac client / AWS
-ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
+session = boto3.Session(profile_name='makaning-2')
+ddb = session.resource('dynamodb', region_name='ap-southeast-1')
 table = ddb.Table('Locations')
-als = boto3.client('location')
+als = session.client('location')
+
+# ## For mac client / AWS
+# ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
+# table = ddb.Table('Locations')
+# als = boto3.client('location')
 
 
 # A function that receives the longitude and latitude of a location and returns the geohash of the location at precision of 5

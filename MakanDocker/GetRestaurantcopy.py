@@ -134,6 +134,6 @@ def find_food(geohash, category, user_lat, user_long):
             formatted_data += "\n"  # Add a blank line between restaurants
         print(formatted_data)
     else:
-        formatted_data = "Sorry, there's no food near you that fits the category!"
+        formatted_data = "Sorry, there's no makan spots nearby that fits that category! Please try another category."
 
     return formatted_data

@@ -1,8 +1,5 @@
 import boto3
 import geohash2
-ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
-table = ddb.Table('Locations')
-als = boto3.client('location')
 from boto3.dynamodb.conditions import Key
 import random
 
@@ -15,8 +12,8 @@ import random
 ## For mac client / AWS
 ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
 table = ddb.Table('Locations')
+SessionTable = ddb.Table('SessionTable')
 als = boto3.client('location')
-
 
 # A function that receives the longitude and latitude of a location and returns the geohash of the location at precision of 5
 def get_geohash(lat, lon):
@@ -42,20 +39,12 @@ def get_category_list(geohash, category):
     same_category_list = []
     if category == "IDK, surprise me!":
         for restaurant in restaurant_list:
-            try:
-                same_category_list.append(restaurant)
-            except:
-                # print ("Restaurant does not match user's food choice")
-                pass
+            same_category_list.append(restaurant)
 
     else:
         for restaurant in restaurant_list:
-            try:
-                if category in restaurant['Categories']:
-                    same_category_list.append(restaurant)
-            except:
-                # print ("Restaurant does not match user's food choice")
-                pass
+            if category in restaurant['Categories']:
+                same_category_list.append(restaurant)
     
     return same_category_list
 
@@ -103,7 +92,6 @@ def food_distance (user_lat, user_long, restaurant_lat, restaurant_long):
 # A function that splits up the list into manageable sections that 
 def split_list(list_to_split, current_index):
     sublist_size = 5
-    current_index = current_index
     start = current_index * sublist_size
     end = (current_index + 1) * sublist_size
     return list_to_split[start:end]
@@ -112,33 +100,24 @@ def split_list(list_to_split, current_index):
 # Simple flow that demonstrates the above
 
 def find_food(geohash, category, user_lat, user_long):
-    # Get all the restaurants in the general area
-    # print ('in find food')
+    print ('in find food')
     restaurant_list = get_category_list(geohash, category)
     restaurant_list = get_restaurant_info(restaurant_list)
     nearby_list = []
     random.shuffle(restaurant_list)
     for restaurant in restaurant_list:
-        # print (restaurant)
-        if restaurant['Restaurant_lat'] == None:
-            pass
-        else:
-            # print (x)
-            # x+=1
-            # print ('searching for distance') 
+        if restaurant['Restaurant_lat'] != None: 
             restaurant_lat = float(restaurant['Restaurant_lat'])
             restaurant_long = float(restaurant['Restaurant_long'])
-            # print (restaurant_lat)
-            # print (type(restaurant_lat))
-            # print (restaurant_long)
             duration = food_distance (user_lat, user_long, restaurant_lat, restaurant_long)
             duration = duration[0]
             # print ("travel time is " + str(duration))
-            if duration < 600:
+            if duration < 720:
                 nearby_list.append(restaurant)
+                # print ('Adding ' + str(restaurant) + 'to list. Duration ' + str(duration))
                 if len(nearby_list) == 5:
                     break
-                # print ('adding to list')
+                
                    
     output_list = split_list(nearby_list,0)
     if output_list:

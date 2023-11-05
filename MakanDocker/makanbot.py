@@ -7,9 +7,11 @@
 # ￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣
 
 import logging
+import boto3
+ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
+SessionTable = ddb.Table('SessionTable')
 from GetRestaurantcopy import *
 from telegram import __version__ as TG_VER
-
 try:
     from telegram import __version_info__
 except ImportError:
@@ -112,7 +114,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
 async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     print('User in selection_2')
     user = update.message.from_user
-    global user_food_choice
+    chatid = user.id
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
     print(user.first_name + "'s user choice = " + user_food_choice)
@@ -133,6 +135,13 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 
 # IF user clicks on "IDK, surprise me!" in selection_1, this flow will happen:
     elif user_food_choice == "IDK, surprise me!":
+        SessionTable.put_item(
+            Item =
+            {
+            'chatID': chatid,
+            'food_choice' : 'IDK, surprise me!'
+            }
+            )
         location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
         print('User clicked "IDK, surprise me!" in /start or selection_1')
 
@@ -148,6 +157,13 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     else:
         user_food_choice_reply = ("Ooh, that sounds delicious! \n\n"
                        + "Send me your current location so that I can look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
+        SessionTable.put_item(
+            Item =
+            {
+            'chatID': chatid,
+            'food_choice' : user_food_choice
+            }
+            )
         location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
         print('User clicked any food category from selection_1 in /start or selection_1')
 
@@ -166,8 +182,8 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 # ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
 async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     print('User in selection_3')
-    global user_food_choice
     user = update.message.from_user
+    chatid = user.id
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
     print(user.first_name + "'s user choice = " + user_food_choice)
@@ -202,6 +218,13 @@ async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     elif user_food_choice == "IDK, surprise me!":
             location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
             print('User clicked "IDK, surprise me!" in /start or selection_2')
+            SessionTable.put_item(
+            Item =
+            {
+            'chatID': chatid,
+            'food_choice' : 'IDK, surprise me!'
+            }
+            )
 
             await update.message.reply_text (
                 surprise_reply,
@@ -217,6 +240,13 @@ async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
                        + "Send me your current location so that I can look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
         location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
         print('User clicked any food category from selection_1 in /start or selection_2')
+        SessionTable.put_item(
+            Item =
+            {
+            'chatID': chatid,
+            'food_choice' : user_food_choice
+            }
+            )
 
         await update.message.reply_text (
             user_food_choice_reply,
@@ -234,7 +264,7 @@ async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 async def selection_4(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     print('User in selection_4')
     user = update.message.from_user
-    global user_food_choice
+    chatid = user.id
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
     print(user.first_name + "'s user choice = " + user_food_choice)
@@ -269,6 +299,13 @@ async def selection_4(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     elif user_food_choice == "IDK, surprise me!":
             location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
             print('User clicked "IDK, surprise me!" in /start or selection_2')
+            SessionTable.put_item(
+            Item =
+            {
+            'chatID': chatid,
+            'food_choice' : 'IDK, surprise me!'
+            }
+            )
 
             await update.message.reply_text (
                 surprise_reply,
@@ -284,6 +321,13 @@ async def selection_4(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
                        + "Send me your current location so that I can look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
         location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
         print('User clicked any food category from selection_1 in /start or selection_2')
+        SessionTable.put_item(
+            Item =
+            {
+            'chatID': chatid,
+            'food_choice' : user_food_choice
+            }
+            )
 
         await update.message.reply_text (
             user_food_choice_reply,
@@ -302,7 +346,7 @@ async def selection_4(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 async def selection_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     print('User in selection 1')
     user = update.message.from_user
-    global user_food_choice
+    chatid = user.id
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
     print(user.first_name + "'s user choice = " + user_food_choice)
@@ -337,6 +381,13 @@ async def selection_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     elif user_food_choice == "IDK, surprise me!":
             location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
             print('User clicked "IDK, surprise me!" in /start or selection_3')
+            SessionTable.put_item(
+            Item =
+            {
+            'chatID': chatid,
+            'food_choice' : 'IDK, surprise me!'
+            }
+            )
 
             await update.message.reply_text (
                 surprise_reply,
@@ -352,6 +403,13 @@ async def selection_1(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
                        + "Send me your current location so that I can look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
         location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
         print('User clicked any food category from selection_1 in /start or selection_1')
+        SessionTable.put_item(
+            Item =
+            {
+            'chatID': chatid,
+            'food_choice' : user_food_choice
+            }
+            )
 
         await update.message.reply_text (
             user_food_choice_reply,
@@ -373,10 +431,10 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     user_location = update.message.location
     user_location_choice = update.message.text
+    chatid = user.id
 
     if user_location_choice == "Back to food categories 🥢":
         print('User chose to go back to food categories')
-
         await update.message.reply_text(
         back_to_food_categories_reply,
             reply_markup=ReplyKeyboardMarkup(
@@ -388,13 +446,28 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     else:
         print ('Searching for food')
         logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude)
-        global user_latitude
-        global user_longitude
         user_latitude = (user_location.latitude)
         user_longitude = (user_location.longitude)
         print("User's latitude = " + str(user_latitude))
         print("User's longitude = " + str(user_longitude))
         user_geohash = get_geohash(user_latitude, user_longitude)
+        user_food_choice = ''
+        user_food_choice = SessionTable.get_item(
+            Key = {
+                'chatID':chatid
+            }
+        )
+        user_food_choice = user_food_choice['Item']['food_choice']
+        SessionTable.put_item(
+            Item =
+            {
+            'chatID': chatid,
+            'food_choice' : user_food_choice,
+            'Latitude':str(user_latitude),
+            'Longitude':str(user_longitude),
+            'Geohash':user_geohash
+            }
+            )
         food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="Back to food categories 🥢")]]
 
@@ -416,6 +489,7 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     user = update.message.from_user
     user_location = update.message.location
     user_location_choice = update.message.text
+    chatid = user.id
 
     if user_location_choice == "Back to food categories 🥢":
         print('User chose to go back to food categories')
@@ -430,12 +504,16 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
     else:
         print ('Searching for food2')
-        # logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude)
-        # user_latitude = (user_location.latitude)
-        # user_longitude = (user_location.longitude)
-        # print("User's latitude = " + str(user_latitude))
-        # print("User's longitude = " + str(user_longitude))
-        user_geohash = get_geohash(user_latitude, user_longitude)
+        user_info = ''
+        user_info = SessionTable.get_item(
+            Key = {
+                'chatID':chatid
+            }
+        )
+        user_food_choice = user_info['Item']['food_choice']
+        user_geohash = user_info['Item']['Geohash']
+        user_latitude = float(user_info['Item']['Latitude'])
+        user_longitude = float(user_info['Item']['Longitude'])
         food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="Back to food categories 🥢")]]
 
@@ -487,13 +565,13 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 def main() -> None:
     """Run the bot."""
 # Prod env token
-    application = Application.builder().token("6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo").build()
+    # application = Application.builder().token("6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo").build()
         # TO DO:
         #     If there's an error in prod env being set up, wait 20s then try again
         #     Need to plan for a graceful failure
 
 # # Test env token
-    # application = Application.builder().token("6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk").build()
+    application = Application.builder().token("6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk").build()
 
 # Add conversation handler with the states
     conv_handler = ConversationHandler(

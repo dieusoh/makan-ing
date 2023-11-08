@@ -164,6 +164,8 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     else:
         user_food_choice_reply = ("Ooh, that sounds delicious! \n\n"
                        + "Send me your current location so that I can look for some " + lower_user_food_choice + " makan spots nearby 🍽️")
+        if user_food_choice == 'Cafes':
+            user_food_choice = 'Cafes & Coffee'
         SessionTable.put_item(
             Item =
             {
@@ -463,8 +465,6 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             }
         )
         user_food_choice = user_food_choice['Item']['food_choice']
-        if user_food_choice == 'Cafes':
-            user_food_choice = 'Cafes & Coffee'
         SessionTable.put_item(
             Item =
             {
@@ -520,8 +520,6 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         )
         user_food_choice = user_info['Item']['food_choice']
         print (user_food_choice)
-        if user_food_choice == 'Cafes':
-            user_food_choice = 'Cafes & Coffee'
         user_geohash = user_info['Item']['Geohash']
         user_latitude = float(user_info['Item']['Latitude'])
         user_longitude = float(user_info['Item']['Longitude'])

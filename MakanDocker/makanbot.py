@@ -15,8 +15,8 @@ import boto3
 
 ### For Mac Client / AWS ###
 ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
-
 SessionTable = ddb.Table('SessionTable')
+
 from GetRestaurantcopy import *
 from telegram import __version__ as TG_VER
 try:
@@ -125,7 +125,7 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
     print(user.first_name + "'s user choice = " + user_food_choice)
-    logger.info("User %s chose %s", user.first_name, user_food_choice)
+    logger.info("User chose %s", user_food_choice)
 
 # IF user clicks on "Next" in selection_1, this flow will happen:
 # 2nd set of food categories
@@ -455,8 +455,6 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude)
         user_latitude = (user_location.latitude)
         user_longitude = (user_location.longitude)
-        print("User's latitude = " + str(user_latitude))
-        print("User's longitude = " + str(user_longitude))
         user_geohash = get_geohash(user_latitude, user_longitude)
         user_food_choice = ''
         user_food_choice = SessionTable.get_item(
@@ -465,6 +463,8 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             }
         )
         user_food_choice = user_food_choice['Item']['food_choice']
+        if user_food_choice == 'Cafes':
+            user_food_choice = 'Cafes & Coffee'
         SessionTable.put_item(
             Item =
             {
@@ -475,6 +475,7 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             'Geohash':user_geohash
             }
             )
+        logger.info('User is at %s, user looking for &f', user_geohash, user_food_choice)
         food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="Back to food categories 🥢")]]
 
@@ -518,9 +519,13 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             }
         )
         user_food_choice = user_info['Item']['food_choice']
+        print (user_food_choice)
+        if user_food_choice == 'Cafes':
+            user_food_choice = 'Cafes & Coffee'
         user_geohash = user_info['Item']['Geohash']
         user_latitude = float(user_info['Item']['Latitude'])
         user_longitude = float(user_info['Item']['Longitude'])
+        logger.info('User is at %s, user looking for &f', user_geohash, user_food_choice)
         food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="Back to food categories 🥢")]]
 

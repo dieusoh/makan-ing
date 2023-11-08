@@ -2,6 +2,7 @@ import boto3
 import geohash2
 from boto3.dynamodb.conditions import Key
 import random
+import logging
 
 # For windows client
 # session = boto3.Session(profile_name='makaning-2')
@@ -14,6 +15,15 @@ ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
 table = ddb.Table('Locations')
 SessionTable = ddb.Table('SessionTable')
 als = boto3.client('location')
+
+# Enables logging
+logging.basicConfig(
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+)
+# Sets higher logging level for httpx to avoid all GET and POST requests being logged
+logging.getLogger("httpx").setLevel(logging.WARNING)
+
+logger = logging.getLogger(__name__)
 
 # A function that receives the longitude and latitude of a location and returns the geohash of the location at precision of 5
 def get_geohash(lat, lon):

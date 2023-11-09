@@ -475,7 +475,7 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             'Geohash':user_geohash
             }
             )
-        logger.info('User is at %s, user looking for &f', user_geohash, user_food_choice)
+        logger.info('User is at %s, user looking for %s', user_geohash, user_food_choice)
         food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="Back to food categories 🥢")]]
 

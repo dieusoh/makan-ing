@@ -77,14 +77,28 @@ def get_restaurant_info(restaurant_list):
             'Restaurant_lat': restaurant.get('Latitude'),
             'Restaurant_long': restaurant.get('Longitude')
         }
+
+        restaurant_lat = restaurant.get('Latitude')
+        restaurant_long = restaurant.get('Longitude')
+        address = restaurant.get('Address')
+        google_maps_url = f"https://www.google.com/maps?q={restaurant_lat},{restaurant_long}"
+        Address_link = f'<a href="{google_maps_url}">{address}</a>'
+        restaurant_info['Address_link'] = Address_link
+
+# # Create a Google Maps link using the latitude and longitude
+#         if Restaurant_lat is not None and Restaurant_long is not None:
+#             google_maps_url = f"https://www.google.com/maps?q={restaurant_lat},{restaurant_long}"
+#             address_link = f'<a href="{google_maps_url}">{address}</a>'
+#         else:
+#             address_link = address
+
         if price is not None:
             restaurant_info['Price'] = price
         
         restaurant_info_list.append(restaurant_info)
     return restaurant_info_list
 
-## function that is given the user's curreent coordinates and the restaurant's coordinates and is calculates the time taken to walk between them. 
-
+# A function that is given the user's curreent coordinates and the restaurant's coordinates and is calculates the time taken to walk between them. 
 def food_distance (user_lat, user_long, restaurant_lat, restaurant_long):
     # print ('in food distance')
     response = als.calculate_route(
@@ -134,13 +148,13 @@ def find_food(geohash, category, user_lat, user_long):
         formatted_data = ""
         for i, restaurant in enumerate(output_list, 1):
             formatted_data += f"{i}. {restaurant['Name']}\n"
-            formatted_data += f"Address: {restaurant['Address']}\n"
+            formatted_data += f"Address: {restaurant['Address_link']}\n"
             travel_time = divmod(duration, 60)
             travel_time = int(travel_time[0])
-            formatted_data += f"About {travel_time} minutes to walk there\n"
             if 'Price' in restaurant:
                 if restaurant['Price'] != 'Know the average price?':
                     formatted_data += f"Price: {restaurant['Price']}\n"
+            formatted_data += f"~{travel_time} minutes to walk there\n"
             formatted_data += "\n"  # Add a blank line between restaurants
         print(formatted_data)
     else:

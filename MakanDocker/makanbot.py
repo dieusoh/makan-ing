@@ -17,7 +17,7 @@ import boto3
 ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
 SessionTable = ddb.Table('SessionTable')
 
-from GetRestaurantcopy import *
+from GetRestaurant import *
 from telegram import __version__ as TG_VER
 try:
     from telegram import __version_info__
@@ -480,7 +480,7 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="Back to food categories 🥢")]]
 
         await update.message.reply_text(
-        food_options,
+        food_options, parse_mode=ParseMode.HTML,
             reply_markup=ReplyKeyboardMarkup(
                 random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
             )
@@ -528,7 +528,7 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="Back to food categories 🥢")]]
 
         await update.message.reply_text(
-        food_options,
+        food_options, parse_mode=ParseMode.HTML,
             reply_markup=ReplyKeyboardMarkup(
                 random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
             )

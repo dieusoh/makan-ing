@@ -8,6 +8,7 @@
 
 import logging
 import boto3
+import requests
 
 ### For Windows Client ###
 # session = boto3.Session(profile_name='makaning-2')
@@ -16,6 +17,12 @@ import boto3
 ### For Mac Client / AWS ###
 ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
 SessionTable = ddb.Table('SessionTable')
+
+## Prod Token:
+bot_token = '6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo'
+
+## Test token:
+# bot_token = '6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk'
 
 from GetRestaurant import *
 from telegram import __version__ as TG_VER
@@ -30,7 +37,7 @@ if __version_info__ < (20, 0, 0, "alpha", 5):
         f"{TG_VER} version of this example, "
         f"visit https://docs.python-telegram-bot.org/en/v{TG_VER}/examples.html"
     )
-from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update
+from telegram import KeyboardButton, ReplyKeyboardMarkup, ReplyKeyboardRemove, Update, Message
 from telegram.constants import ParseMode
 from telegram.ext import (
     Application,
@@ -455,6 +462,10 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     else:
         print ('Searching for food')
         logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude)
+        message = 'Looking for some delicious makan spots now 🍣 \n\n How about...'
+        send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
+        requests.get(send_text)
+
         user_latitude = (user_location.latitude)
         user_longitude = (user_location.longitude)
         user_geohash = get_geohash(user_latitude, user_longitude)
@@ -475,7 +486,7 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             'Geohash':user_geohash
             }
             )
-        logger.info('User is at %s, user looking for %s', user_geohash, user_food_choice)
+        logger.info('User session %s is at %s, user looking for %s', chatid,user_geohash, user_food_choice)
         food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="Back to food categories 🥢")]]
 
@@ -518,6 +529,9 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
                 'chatID':chatid
             }
         )
+        message = 'Looking for some delicious makan spots now 🍣 \n\n How about...'
+        send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
+        requests.get(send_text)
         user_food_choice = user_info['Item']['food_choice']
         print (user_food_choice)
         user_geohash = user_info['Item']['Geohash']
@@ -575,13 +589,13 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 def main() -> None:
     """Run the bot."""
 # Prod env token
-    application = Application.builder().token("6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo").build()
+    # application = Application.builder().token("6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo").build()
         # TO DO:
         #     If there's an error in prod env being set up, wait 20s then try again
         #     Need to plan for a graceful failure
 
 # # Test env token
-    # application = Application.builder().token("6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk").build()
+    application = Application.builder().token(bot_token).build()
 
 # Add conversation handler with the states
     conv_handler = ConversationHandler(

@@ -12,3 +12,6 @@
 **WHEN PUSHING TO PROD:**
 1. Ensure you change the bot token to the prod environment token (bottom of makanbot.py)
 2. Ensure you change client from Window Client to AWS Client (top of makanbot.py AND GetRestaurant.py)
+
+**HOW TO BRANCH:**
+- git checkout -b <branch name here>

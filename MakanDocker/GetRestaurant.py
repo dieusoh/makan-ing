@@ -135,7 +135,7 @@ def find_food(geohash, category, user_lat, user_long):
             restaurant_long = float(restaurant['Restaurant_long'])
             duration = food_distance (user_lat, user_long, restaurant_lat, restaurant_long)
             duration = duration[0]
-            # print ("travel time is " + str(duration))
+            restaurant['Duration'] = duration
             if duration < 720:
                 nearby_list.append(restaurant)
                 # print ('Adding ' + str(restaurant) + 'to list. Duration ' + str(duration))
@@ -149,6 +149,7 @@ def find_food(geohash, category, user_lat, user_long):
         for i, restaurant in enumerate(output_list, 1):
             formatted_data += f"{i}. {restaurant['Name']}\n"
             formatted_data += f"Address: {restaurant['Address_link']}\n"
+            duration = restaurant['Duration']
             travel_time = divmod(duration, 60)
             travel_time = int(travel_time[0])
             if 'Price' in restaurant:

@@ -7,6 +7,8 @@ import boto3
 import geohash2
 from decimal import Decimal
 import time
+import re
+from datetime import datetime
 
 ## For windows client
 session = boto3.Session(profile_name='makaning-2')
@@ -131,6 +133,75 @@ def get_restaurant_info(url):
         GeohashBroad = geohash2.encode(Coordinates[1], Coordinates[0],precision = 5)
         GeohashPrecise = geohash2.encode(Coordinates[1], Coordinates[0], precision = 6)
 
+        # Get opening hours
+        opening_hours_dict = {}
+        try: 
+            opening_hours_section = soup.find('div', class_='venue-details__item--opening')
+            opening_hours_header = opening_hours_section.find('div', class_='venueInfo-details-header-item-header--openingHours')
+            hidden_div = opening_hours_section.find('div', id='venueInfo-details-header-item-body-hidden-openingHours')
+            # Extract the opening hours from all days
+            days_and_hours = re.findall(r'(\w+):\s*((?:\d{1,2}:\d{2}[apm]+\s*-\s*\d{1,2}:\d{2}[apm]+\s*)+|Closed)', hidden_div.get_text())
+            # Extract the current day's opening hours
+            current_day_opening_hours = opening_hours_section.find('p').get_text()
+            current_day_match = re.search(r'0?(\w+):\s*((?:\d{1,2}:\d{2}[apm]+\s*-\s*\d{1,2}:\d{2}[apm]+\s*)+|Closed)', current_day_opening_hours)
+            # Initialize an empty dictionary to store the opening hours for each day
+            # Display the results
+            if current_day_match:
+                current_day, current_day_hours = current_day_match.groups()
+                if current_day_hours == 'Closed':
+                    opening_hours_dict[current_day] = 'Closed'
+
+                else:
+                    time_slots = re.findall(r'\d{1,2}:\d{2}[apmAPM]{2}\s*-\s*\d{1,2}:\d{2}[apmAPM]{2}', current_day_hours)
+                    formatted_time_slots = []
+                    for time_slot in time_slots:
+                        start_time_str, end_time_str = time_slot.split(' - ')
+                        start_time = datetime.strptime(start_time_str, "%I:%M%p")
+                        end_time = datetime.strptime(end_time_str, "%I:%M%p")
+
+                        formatted_start_time = start_time.strftime('%I:%M%p').lstrip('0').replace(':00', '')
+                        formatted_end_time = end_time.strftime('%I:%M%p').lstrip('0').replace(':00', '')
+
+                        formatted_time_slots.append(f"{formatted_start_time} - {formatted_end_time}")
+
+                        # Join the formatted time slots into a single string
+                        formatted_current_day_hours  = ' | '.join(formatted_time_slots)
+                            
+                    opening_hours_dict[current_day] = formatted_current_day_hours
+
+            for day, opening_hours in days_and_hours:
+                if opening_hours == 'Closed':
+                    formatted_hours = 'Closed'
+                    opening_hours_dict[day] = 'Closed'
+                else:
+                    # Split the string into individual time ranges
+                    time_slots = re.findall(r'\d{1,2}:\d{2}[apmAPM]{2}\s*-\s*\d{1,2}:\d{2}[apmAPM]{2}', opening_hours)
+                    formatted_time_slots = []
+                    for time_slot in time_slots:
+                        start_time_str, end_time_str = time_slot.split(' - ')
+                        start_time = datetime.strptime(start_time_str, "%I:%M%p")
+                        end_time = datetime.strptime(end_time_str, "%I:%M%p")
+
+                        formatted_start_time = start_time.strftime('%I:%M%p').lstrip('0').replace(':00', '')
+                        formatted_end_time = end_time.strftime('%I:%M%p').lstrip('0').replace(':00', '')
+
+                        formatted_time_slots.append(f"{formatted_start_time} - {formatted_end_time}")
+
+                        # Join the formatted time slots into a single string
+                        formatted_current_day_hours  = ' | '.join(formatted_time_slots)
+
+                    opening_hours_dict[day] = formatted_current_day_hours
+        except:
+            opening_hours_dict['Monday'] = 'Unknown'
+            opening_hours_dict['Tuesday'] = 'Unknown'
+            opening_hours_dict['Wednesday'] = 'Unknown'
+            opening_hours_dict['Thursday'] = 'Unknown'
+            opening_hours_dict['Friday'] = 'Unknown'
+            opening_hours_dict['Saturday'] = 'Unknown'
+            opening_hours_dict['Sunday'] = 'Unknown'
+        
+        print(opening_hours_dict)
+
         # Write to DynamoDB
         table.put_item(
             Item={
@@ -142,7 +213,14 @@ def get_restaurant_info(url):
                 'Price': price,
                 'Categories': categories,
                 'Latitude': str(Coordinates[1]),
-                'Longitude': str(Coordinates[0])
+                'Longitude': str(Coordinates[0]),
+                'Monday': opening_hours_dict['Monday'],
+                'Tuesday': opening_hours_dict['Tuesday'],
+                'Wednesday': opening_hours_dict['Wednesday'],
+                'Thursday': opening_hours_dict['Thursday'],
+                'Friday': opening_hours_dict['Friday'],
+                'Saturday': opening_hours_dict['Saturday'],
+                'Sunday': opening_hours_dict['Sunday']
                 }
         )
         print ('Wrote to table')

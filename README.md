@@ -14,4 +14,4 @@
 2. Ensure you change client from Window Client to AWS Client (top of makanbot.py AND GetRestaurant.py)
 
 **HOW TO BRANCH:**
-- git checkout -b <branch name here>
+- git checkout -b (branch name here)

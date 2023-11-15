@@ -10,12 +10,12 @@ import logging
 import boto3
 
 ### For Windows Client ###
-# session = boto3.Session(profile_name='makaning-2')
-# ddb = session.resource('dynamodb', region_name='ap-southeast-1')
+session = boto3.Session(profile_name='makaning-2')
+ddb = session.resource('dynamodb', region_name='ap-southeast-1')
 
 ### For Mac Client / AWS ###
-ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
-SessionTable = ddb.Table('SessionTable')
+# ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
+# SessionTable = ddb.Table('SessionTable')
 
 from GetRestaurant import *
 from telegram import __version__ as TG_VER
@@ -225,23 +225,23 @@ async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 
 # If user clicks on "IDK, surprise me!" in selection_2, this flow will happen:
     elif user_food_choice == "IDK, surprise me!":
-            location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True), [KeyboardButton(text="Back to food categories 🥢")]], [KeyboardButton(text="Back to food categories 🥢")]]
-            print('User clicked "IDK, surprise me!" in /start or selection_2')
-            SessionTable.put_item(
+        SessionTable.put_item(
             Item =
             {
             'chatID': chatid,
             'food_choice' : 'IDK, surprise me!'
             }
             )
+        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True), [KeyboardButton(text="Back to food categories 🥢")]], [KeyboardButton(text="Back to food categories 🥢")]]
+        print('User clicked "IDK, surprise me!" in /start or selection_2')
 
-            await update.message.reply_text (
+        await update.message.reply_text (
                 surprise_reply,
                 reply_markup=ReplyKeyboardMarkup(
                     location_keyboard, one_time_keyboard=True, input_field_placeholder="Send me your location! (Stalker vibes, jk)"
                 )
             )
-            return LOCATION
+        return LOCATION
 
 # IF user clicks on any food categories from selection_2, this flow will happen:
     else:
@@ -575,13 +575,13 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 def main() -> None:
     """Run the bot."""
 # Prod env token
-    application = Application.builder().token("6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo").build()
+    # application = Application.builder().token("6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo").build()
         # TO DO:
         #     If there's an error in prod env being set up, wait 20s then try again
         #     Need to plan for a graceful failure
 
 # # Test env token
-    # application = Application.builder().token("6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk").build()
+    application = Application.builder().token("6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk").build()
 
 # Add conversation handler with the states
     conv_handler = ConversationHandler(

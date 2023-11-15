@@ -10,11 +10,9 @@ import logging
 import boto3
 import requests
 
-### For Windows Client ###
-# session = boto3.Session(profile_name='makaning-2')
-# ddb = session.resource('dynamodb', region_name='ap-southeast-1')
+### Comment this out if not Windows Client C###
+# boto3.setup_default_session(profile_name='makaning-2')
 
-### For Mac Client / AWS ###
 ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
 SessionTable = ddb.Table('SessionTable')
 
@@ -232,23 +230,23 @@ async def selection_3(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
 
 # If user clicks on "IDK, surprise me!" in selection_2, this flow will happen:
     elif user_food_choice == "IDK, surprise me!":
-            location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True), [KeyboardButton(text="Back to food categories 🥢")]], [KeyboardButton(text="Back to food categories 🥢")]]
-            print('User clicked "IDK, surprise me!" in /start or selection_2')
-            SessionTable.put_item(
-            Item =
-            {
-            'chatID': chatid,
-            'food_choice' : 'IDK, surprise me!'
-            }
-            )
+        SessionTable.put_item(
+        Item =
+        {
+        'chatID': chatid,
+        'food_choice' : 'IDK, surprise me!'
+        }
+        )
+        location_keyboard = [[KeyboardButton(text="🍴 Send current location", request_location=True)], [KeyboardButton(text="Back to food categories 🥢")]]
+        print('User clicked "IDK, surprise me!" in /start or selection_2')
 
-            await update.message.reply_text (
-                surprise_reply,
-                reply_markup=ReplyKeyboardMarkup(
-                    location_keyboard, one_time_keyboard=True, input_field_placeholder="Send me your location! (Stalker vibes, jk)"
-                )
+        await update.message.reply_text (
+            surprise_reply,
+            reply_markup=ReplyKeyboardMarkup(
+                location_keyboard, one_time_keyboard=True, input_field_placeholder="Send me your location! (Stalker vibes, jk)"
             )
-            return LOCATION
+        )
+        return LOCATION
 
 # IF user clicks on any food categories from selection_2, this flow will happen:
     else:

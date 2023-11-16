@@ -11,16 +11,16 @@ import boto3
 import requests
 
 ### Comment this out if not Windows Client C###
-# boto3.setup_default_session(profile_name='makaning-2')
+boto3.setup_default_session(profile_name='makaning-2')
 
 ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
 SessionTable = ddb.Table('SessionTable')
 
 ## Prod Token:
-bot_token = '6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo'
+# bot_token = '6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo'
 
-## Test token:
-# bot_token = '6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk'
+## Test Env token:
+bot_token = '6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk'
 
 from GetRestaurant import *
 from telegram import __version__ as TG_VER
@@ -460,7 +460,7 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     else:
         print ('Searching for food')
         logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude)
-        message = 'Looking for some delicious makan spots now 🍣 \n\n How about...'
+        message = 'Looking for some delicious makan spots now 🍣 \n\nHow about...'
         send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
         requests.get(send_text)
 

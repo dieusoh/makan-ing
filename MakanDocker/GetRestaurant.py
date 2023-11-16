@@ -3,6 +3,8 @@ import geohash2
 from boto3.dynamodb.conditions import Key
 import random
 import logging
+from datetime import date
+import calendar
 
 # For windows client
 # session = boto3.Session(profile_name='makaning-2')
@@ -68,14 +70,16 @@ def get_nearby_list(precise_geohash, restaurant_list):
 
 # A function that takes the list of restaurants and returns their names and addresses
 def get_restaurant_info(restaurant_list):
+    current_date = date.today()
+    today = calendar.day_name[current_date.weekday()]
+
     restaurant_info_list = []
     for restaurant in restaurant_list:
-        price = restaurant.get('Price', None)  # Use item.get() to handle cases where 'Price' doesn't exist
         restaurant_info = {
             'Name': restaurant.get('Name'),
             'Address': restaurant.get('Address'),
             'Restaurant_lat': restaurant.get('Latitude'),
-            'Restaurant_long': restaurant.get('Longitude')
+            'Restaurant_long': restaurant.get('Longitude'),
         }
 
         restaurant_lat = restaurant.get('Latitude')
@@ -92,15 +96,20 @@ def get_restaurant_info(restaurant_list):
 #         else:
 #             address_link = address
 
+        price = restaurant.get('Price', None)  # Use item.get() to handle cases where 'Price' doesn't exist
         if price is not None:
             restaurant_info['Price'] = price
-        
+
+        Opening_hours = restaurant.get(today, None)
+        if Opening_hours is not None:
+            restaurant_info['Opening_hours'] = Opening_hours
+
         restaurant_info_list.append(restaurant_info)
+
     return restaurant_info_list
 
 # A function that is given the user's curreent coordinates and the restaurant's coordinates and is calculates the time taken to walk between them. 
 def food_distance (user_lat, user_long, restaurant_lat, restaurant_long):
-    # print ('in food distance')
     response = als.calculate_route(
         CalculatorName = 'GrabCalculator',
         DeparturePosition=[user_long, user_lat],
@@ -124,7 +133,6 @@ def split_list(list_to_split, current_index):
 # Simple flow that demonstrates the above
 
 def find_food(geohash, category, user_lat, user_long):
-    print ('in find food')
     restaurant_list = get_category_list(geohash, category)
     restaurant_list = get_restaurant_info(restaurant_list)
     nearby_list = []
@@ -152,6 +160,10 @@ def find_food(geohash, category, user_lat, user_long):
             duration = restaurant['Duration']
             travel_time = divmod(duration, 60)
             travel_time = int(travel_time[0])
+
+            if 'Opening_hours' in restaurant and restaurant['Opening_hours'] not in ('Unknown', ' '):
+                formatted_data += f"Opening Hours: {restaurant['Opening_hours']}\n"
+
             if 'Price' in restaurant:
                 if restaurant['Price'] != 'Know the average price?':
                     formatted_data += f"Price: {restaurant['Price']}\n"

@@ -11,16 +11,16 @@ import boto3
 import requests
 
 ### Comment this out if not Windows Client C###
-boto3.setup_default_session(profile_name='makaning-2')
+# boto3.setup_default_session(profile_name='makaning-2')
 
 ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
 SessionTable = ddb.Table('SessionTable')
 
 ## Prod Token:
-# bot_token = '6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo'
+bot_token = '6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo'
 
 ## Test Env token:
-bot_token = '6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk'
+# bot_token = '6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk'
 
 from GetRestaurant import *
 from telegram import __version__ as TG_VER

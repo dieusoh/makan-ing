@@ -18,6 +18,7 @@ SessionTable = ddb.Table('SessionTable')
 MRT_table = ddb.Table('MRT')
 ssm = boto3.client('ssm')
 
+#### This section sets whether the prod or staging API is selected
 # stage = 'prod'
 stage = 'test'
 

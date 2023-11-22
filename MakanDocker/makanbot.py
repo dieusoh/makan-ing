@@ -11,10 +11,11 @@ import boto3
 import requests
 
 ### Comment this out if not Windows Client C###
-boto3.setup_default_session(profile_name='makaning-2')
+# boto3.setup_default_session(profile_name='makaning-2')
 
 ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
 SessionTable = ddb.Table('SessionTable')
+MRT_table = ddb.Table('MRT')
 
 ## Prod Token:
 # bot_token = '6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo'
@@ -98,6 +99,8 @@ surprise_reply = ("Don't worry, I'll look for something delicious for you! (ﾉ�
 back_to_food_categories_reply = ("Sure! Let's pick something else.")
 
 mrt_reply = ("Type in the nearest MRT station to where you currently are, or where you're planning to go!")
+
+mrt_error_reply = ("Sorry, I didn't understand that, could you try typing it in again or choosing another location?")
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
 
@@ -468,7 +471,7 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
     else:
         print ('Searching for food')
-        logger.info("Location of %s: %f / %f", user.first_name, user_location.latitude, user_location.longitude)
+        logger.info("Location of %s: %f / %f", chatid, user_location.latitude, user_location.longitude)
         message = 'Looking for some delicious makan spots now 🍣 \n\nHow about...'
         send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
         requests.get(send_text)
@@ -543,7 +546,6 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         user_geohash = user_info['Item']['Geohash']
         user_latitude = float(user_info['Item']['Latitude'])
         user_longitude = float(user_info['Item']['Longitude'])
-        logger.info('User is at %s, user looking for &f', user_geohash, user_food_choice)
         food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="🥢 Back to food categories")]]
 
@@ -559,12 +561,69 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 # ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
 async def get_mrt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    user = update.message.from_user
     print("User is in get_mrt")
+    chatid = user.id
     user_mrt_choice = update.message.text
+    user_mrt_choice = user_mrt_choice.lower()
+    random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="🥢 Back to food categories")]]
+    # Get geohash of MRT
+    try: 
+        mrt_info = MRT_table.query(
+            KeyConditionExpression = Key('MRT-name').eq(user_mrt_choice)
+        )
+        user_geohash = mrt_info['Items'][0]['Geohash']
+        user_latitude = float(mrt_info['Items'][0]['Latitude'])
+        user_longitude = float(mrt_info['Items'][0]['Longitude'])
+        message = 'Looking for some delicious makan spots now 🍣 \n\n How about...'
+        send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
+        requests.get(send_text)
+        user_food_choice = ''
+        user_food_choice = SessionTable.get_item(
+            Key = {
+                'chatID':chatid
+            }
+        )
+        user_food_choice = ''
+        user_food_choice = SessionTable.get_item(
+            Key = {
+                'chatID':chatid
+            }
+        )
+        user_food_choice = user_food_choice['Item']['food_choice']
+        SessionTable.put_item(
+            Item =
+            {
+            'chatID': chatid,
+            'food_choice' : user_food_choice,
+            'Latitude':str(user_latitude),
+            'Longitude':str(user_longitude),
+            'Geohash':user_geohash
+            }
+            )
+        logger.info('User session %s is at %s, user looking for %s', chatid,user_geohash, user_food_choice)
+        food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
+        random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="🥢 Back to food categories")]]
 
-    print(user_mrt_choice)
+        await update.message.reply_text(
+        food_options, parse_mode=ParseMode.HTML,
+            reply_markup=ReplyKeyboardMarkup(
+                random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+            )
+        )
+        return RANDOM
+    
+    except:
+        # add some error handling logic here when they input an mrt station that is wrong
+        print ('Error in get_mrt')
+        await update.message.reply_text(
+        mrt_error_reply, parse_mode=ParseMode.HTML,
+            reply_markup=ReplyKeyboardMarkup(
+                random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+            )
+        )
+        return GET_MRT  
 
-### create DB table with all the MRT stations + REGEX it so that people can type
 
 
 # ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 

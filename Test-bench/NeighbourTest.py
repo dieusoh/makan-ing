@@ -131,47 +131,29 @@ def expanded_search(geohash):
 
 # Simple flow that demonstrates the above
 
-def find_food(geohash, category, user_lat, user_long):
-    print ('in find food')
-    restaurant_list = get_category_list(geohash, category)
-    restaurant_list = get_restaurant_info(restaurant_list)
-    nearby_list = []
-    random.shuffle(restaurant_list)
-    for restaurant in restaurant_list:
-        if restaurant['Restaurant_lat'] != None: 
-            restaurant_lat = float(restaurant['Restaurant_lat'])
-            restaurant_long = float(restaurant['Restaurant_long'])
-            duration = food_distance (user_lat, user_long, restaurant_lat, restaurant_long)
-            duration = duration[0]
-            restaurant['Duration'] = duration
-            if duration < 720:
-                nearby_list.append(restaurant)
-                # print ('Adding ' + str(restaurant) + 'to list. Duration ' + str(duration))
-                if len(nearby_list) == 5:
-                    break
-        if len(nearby_list) < 3:
-            print ('Not enough food nearby, expanding search')
-            expanded_search(geohash)
 
 
-                
-                   
-    output_list = split_list(nearby_list,0)
-    if output_list:
-        formatted_data = ""
-        for i, restaurant in enumerate(output_list, 1):
-            formatted_data += f"{i}. {restaurant['Name']}\n"
-            formatted_data += f"Address: {restaurant['Address_link']}\n"
-            duration = restaurant['Duration']
-            travel_time = divmod(duration, 60)
-            travel_time = int(travel_time[0])
-            if 'Price' in restaurant:
-                if restaurant['Price'] != 'Know the average price?':
-                    formatted_data += f"Price: {restaurant['Price']}\n"
-            formatted_data += f"~{travel_time} minutes to walk there\n"
-            formatted_data += "\n"  # Add a blank line between restaurants
-        print(formatted_data)
-    else:
-        formatted_data = "Sorry, there's no makan spots nearby that fits that category! Please try another category."
+def geohash_neighbors(geohash, lat, lon):
+    # Define the precision of the GeoHash
+    precision = len(geohash)
+    
+    # Define the maximum error in meters to identify neighbors
+    max_error = 10 ** -(precision / 2 )
+    
+    # Calculate the neighbors
+    neighbors = []
+    for lat_offset in [-1, 0, 1]:
+        for lon_offset in [-1, 0, 1]:
+            if lat_offset == 0 and lon_offset == 0:
+                continue
+            neighbor_lat = lat + lat_offset * max_error
+            neighbor_lon = lon + lon_offset * max_error
+            neighbor_geohash = geohash2.encode(neighbor_lat, neighbor_lon, 5)
+            neighbors.append(neighbor_geohash)
+    
+    return neighbors
 
-    return formatted_data
+geohash = "w21z2"
+lat = 1.318337
+lon = 103.753793
+print (geohash_neighbors(geohash, lat, lon))

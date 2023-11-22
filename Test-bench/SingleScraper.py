@@ -154,7 +154,7 @@ def get_restaurant_info(url):
 def main(category):
     base_url = 'https://www.burpple.com/search/sg?offset='
     category = category
-    offset = 80
+    offset = 0
     limit = 7000
     print(category)
 
@@ -178,9 +178,7 @@ def main(category):
                 time.sleep(2)
                 print ("Waited two seconds, retrying")
 
-Categories = ["Burgers", "Cafes+%26+Coffee", "Chinese", "French", "Halal", "Hawker-fare", "Indian", "Italian", "Japanese", "Korean", "Malay", "Mediterranean", "Mexican", "Pasta", "Pizza", "Ramen", "Salads", "Spanish"]
-for category in Categories:
-    main(category)
+get_restaurant_info('https://www.burpple.com/birdfolks')
 
 # link = 'https://www.burpple.com/yoons-social-kitchen-by-yoons-traditional-teochew-kueh'
 # get_restaurant_info(link)

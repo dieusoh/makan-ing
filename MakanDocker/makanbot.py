@@ -16,12 +16,16 @@ import requests
 ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
 SessionTable = ddb.Table('SessionTable')
 MRT_table = ddb.Table('MRT')
+ssm = boto3.client('ssm')
 
-## Prod Token:
-# bot_token = '6243320723:AAE6Bip1fb8ltmhUbFyWXE7tdrxdZ9GgDBo'
+stage = 'prod'
+stage = 'test'
 
-## Test Env token:
-bot_token = '6374507603:AAFmHROHbX3Y2vTtm_dFp6rBkl1iKy0CBVk'
+if stage == 'prod':
+    bot_token = ssm.get_parameter(Name='/telegram/prod-token', WithDecryption=True)['Parameter']['Value']
+
+else:
+    bot_token = ssm.get_parameter(Name='/telegram/test-token', WithDecryption=True)['Parameter']['Value']
 
 from GetRestaurant import *
 from telegram import __version__ as TG_VER

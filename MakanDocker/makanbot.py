@@ -502,16 +502,33 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             }
             )
         logger.info('User session %s is at %s, user looking for %s', chatid,user_geohash, user_food_choice)
-        food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
+        restaurant_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
+        number_of_restaurants = restaurant_options[1]
+        print (number_of_restaurants)
+        food_options = restaurant_options[0]
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="🥢 Back to food categories")]]
-
-        await update.message.reply_text(
-        food_options, parse_mode=ParseMode.HTML,
-            reply_markup=ReplyKeyboardMarkup(
-                random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+        if number_of_restaurants < 6 and number_of_restaurants > 0:
+            message = "Sorry, these were all the makan places that we could find near you that fit the category, please try a different category for more options"
+            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
+            requests.get(send_text)
+                
+            await update.message.reply_text(
+            food_options, parse_mode=ParseMode.HTML,
+                reply_markup=ReplyKeyboardMarkup(
+                    random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+                )
             )
-        )
-        return RANDOM
+            return RANDOM
+        else:
+            await update.message.reply_text(
+                food_options, parse_mode=ParseMode.HTML,
+                    reply_markup=ReplyKeyboardMarkup(
+                        random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+                    )
+                )
+            return RANDOM
+
+
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
 
@@ -551,16 +568,31 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         user_geohash = user_info['Item']['Geohash']
         user_latitude = float(user_info['Item']['Latitude'])
         user_longitude = float(user_info['Item']['Longitude'])
-        food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
+        restaurant_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
+        number_of_restaurants = restaurant_options[1]
+        food_options = restaurant_options[0]
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="🥢 Back to food categories")]]
 
-        await update.message.reply_text(
-        food_options, parse_mode=ParseMode.HTML,
-            reply_markup=ReplyKeyboardMarkup(
-                random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+        if number_of_restaurants < 6 and number_of_restaurants > 0:
+            message = "Sorry, these were all the makan places that we could find near you that fit the category, please try a different category for more options"
+            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
+            requests.get(send_text)
+                
+            await update.message.reply_text(
+            food_options, parse_mode=ParseMode.HTML,
+                reply_markup=ReplyKeyboardMarkup(
+                    random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+                )
             )
-        )
-        return RANDOM
+            return RANDOM
+        else:
+            await update.message.reply_text(
+                food_options, parse_mode=ParseMode.HTML,
+                    reply_markup=ReplyKeyboardMarkup(
+                        random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+                    )
+                )
+            return RANDOM
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
 
@@ -607,16 +639,31 @@ async def get_mrt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             }
             )
         logger.info('User session %s is at %s, user looking for %s', chatid,user_geohash, user_food_choice)
-        food_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
+        restaurant_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
+        number_of_restaurants = restaurant_options[1]
+        food_options = restaurant_options[0]
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="🥢 Back to food categories")]]
 
-        await update.message.reply_text(
-        food_options, parse_mode=ParseMode.HTML,
-            reply_markup=ReplyKeyboardMarkup(
-                random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+        if number_of_restaurants < 6 and number_of_restaurants > 0:
+            message = "Sorry, these were all the makan places that we could find near you that fit the category, please try a different category for more options"
+            send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
+            requests.get(send_text)
+                
+            await update.message.reply_text(
+            food_options, parse_mode=ParseMode.HTML,
+                reply_markup=ReplyKeyboardMarkup(
+                    random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+                )
             )
-        )
-        return RANDOM
+            return RANDOM
+        else:
+            await update.message.reply_text(
+                food_options, parse_mode=ParseMode.HTML,
+                    reply_markup=ReplyKeyboardMarkup(
+                        random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+                    )
+                )
+            return RANDOM
     
     except:
         # add some error handling logic here when they input an mrt station that is wrong

@@ -150,7 +150,7 @@ def find_food(geohash, category, user_lat, user_long):
                 if len(nearby_list) == 5:
                     break
     number_of_restaurants = len(nearby_list)
-    print (number_of_restaurants)
+    # print (number_of_restaurants)
     output_list = split_list(nearby_list,0)
     if output_list:
         formatted_data = ""

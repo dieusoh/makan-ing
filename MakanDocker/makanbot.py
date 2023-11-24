@@ -94,6 +94,10 @@ reply_keyboard_4 = [
 ["Back", "Next"],
 ]
 
+random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="🥢 Back to food categories")]]
+
+back_to_food_categories_keyboard = [[KeyboardButton(text="🥢 Back to food categories")]]
+
 next_reply = ("Here are more options!")
 
 back_reply = ("Let's backtrack.")
@@ -506,7 +510,6 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         number_of_restaurants = restaurant_options[1]
         print (number_of_restaurants)
         food_options = restaurant_options[0]
-        random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="🥢 Back to food categories")]]
         if number_of_restaurants < 5 and number_of_restaurants > 0:
             message = "Sorry, these were all the makan places that we could find near you that fit the category, please try a different category for more options"
             send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
@@ -515,10 +518,11 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             await update.message.reply_text(
             food_options, parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardMarkup(
-                    random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+                    back_to_food_categories_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
                 )
             )
             return RANDOM
+        
         else:
             await update.message.reply_text(
                 food_options, parse_mode=ParseMode.HTML,
@@ -581,10 +585,11 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             await update.message.reply_text(
             food_options, parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardMarkup(
-                    random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+                    back_to_food_categories_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
                 )
             )
             return RANDOM
+        
         else:
             await update.message.reply_text(
                 food_options, parse_mode=ParseMode.HTML,
@@ -642,7 +647,6 @@ async def get_mrt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         restaurant_options = find_food(user_geohash, user_food_choice, user_latitude, user_longitude)
         number_of_restaurants = restaurant_options[1]
         food_options = restaurant_options[0]
-        random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="🥢 Back to food categories")]]
 
         if number_of_restaurants < 5 and number_of_restaurants > 0:
             message = "Sorry, these were all the makan places that we could find near you that fit the category, please try a different category for more options"
@@ -652,10 +656,11 @@ async def get_mrt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
             await update.message.reply_text(
             food_options, parse_mode=ParseMode.HTML,
                 reply_markup=ReplyKeyboardMarkup(
-                    random_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
+                    back_to_food_categories_keyboard, one_time_keyboard=True, input_field_placeholder="I'm so hungry :("
                 )
             )
             return RANDOM
+        
         else:
             await update.message.reply_text(
                 food_options, parse_mode=ParseMode.HTML,
@@ -693,6 +698,28 @@ async def about(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text(
         about_text, parse_mode=ParseMode.HTML, reply_markup=ReplyKeyboardRemove()
     )
+    return ConversationHandler.END
+
+# 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
+
+# ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
+# When user sends /feedback, this message will trigger:
+async def feedback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    print("User is in /feedback")
+    ### !!! REWORK THIS MESSAGE IN THE FUTURE. Make it more concise. 
+    feedback_text = ("Makan-ing is built for the everyday Singaporean! We are always looking for ways to improve our app and make it better. \n\n"
+                     + "You can email us at hello@makaning.com if you:\n"
+                     + "- Have any feedback (good or bad)\n"
+                     + "- Have a makan spots you would like to recommend\n"
+                     + "- Are interested in any partnerships or collaboration\n"
+                     + "- Or just want to say hi!\n\n"
+                     + "We read every email! ヽ(*⌒▽⌒*)ﾉ"
+    )
+
+    await update.message.reply_text(
+        feedback_text, parse_mode=ParseMode.HTML, reply_markup=ReplyKeyboardRemove()
+    )
+    
     return ConversationHandler.END
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
@@ -745,7 +772,6 @@ def main() -> None:
             ]
         },
         # Will probably not need the /cancel fallback command
-        # fallbacks=[CommandHandler("cancel", cancel)],
         fallbacks=[CommandHandler("start", start)]
     )
 
@@ -753,7 +779,7 @@ def main() -> None:
     # application.add_handler(CommandHandler("start", start))
     # application.add_handler(CommandHandler("cancel", cancel))
     application.add_handler(CommandHandler("about", about))
-    # application.add_handler(CommandHandler("feedback", feedback))
+    application.add_handler(CommandHandler("feedback", feedback))
 
     application.add_handler(conv_handler)
 

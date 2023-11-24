@@ -11,7 +11,7 @@ import boto3
 import requests
 
 ### Comment this out if not Windows Client C###
-boto3.setup_default_session(profile_name='makaning-2')
+# boto3.setup_default_session(profile_name='makaning-2')
 
 ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
 SessionTable = ddb.Table('SessionTable')

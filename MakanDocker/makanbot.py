@@ -577,7 +577,7 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         food_options = restaurant_options[0]
         random_keyboard = [[KeyboardButton(text="More options please! 🥠")], [KeyboardButton(text="🥢 Back to food categories")]]
 
-        if number_of_restaurants < 6 and number_of_restaurants > 0:
+        if number_of_restaurants < 5 and number_of_restaurants > 0:
             message = "Sorry, these were all the makan places that we could find near you that fit the category, please try a different category for more options"
             send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
             requests.get(send_text)
@@ -648,7 +648,7 @@ async def get_mrt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         number_of_restaurants = restaurant_options[1]
         food_options = restaurant_options[0]
 
-        if number_of_restaurants < 6 and number_of_restaurants > 0:
+        if number_of_restaurants < 5 and number_of_restaurants > 0:
             message = "Sorry, these were all the makan places that we could find near you that fit the category, please try a different category for more options"
             send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
             requests.get(send_text)

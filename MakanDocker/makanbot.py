@@ -10,7 +10,7 @@ import logging
 import boto3
 import requests
 
-### Comment this out if not Windows Client C###
+### Comment this out if not Windows Client
 # boto3.setup_default_session(profile_name='makaning-2')
 
 ddb = boto3.resource('dynamodb', region_name='ap-southeast-1')
@@ -19,8 +19,8 @@ MRT_table = ddb.Table('MRT')
 ssm = boto3.client('ssm')
 
 #### This section sets whether the prod or staging API is selected
-# stage = 'prod'
-stage = 'test'
+stage = 'prod'
+# stage = 'test'
 
 if stage == 'prod':
     bot_token = ssm.get_parameter(Name='/telegram/prod-token', WithDecryption=True)['Parameter']['Value']
@@ -143,7 +143,6 @@ async def selection_2(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int
     chatid = user.id
     user_food_choice = update.message.text
     lower_user_food_choice = str.lower(user_food_choice)
-    print(user.first_name + "'s user choice = " + user_food_choice)
     logger.info("User chose %s", user_food_choice)
 
 # IF user clicks on "Next" in selection_1, this flow will happen:

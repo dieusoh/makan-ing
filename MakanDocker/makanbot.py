@@ -22,8 +22,8 @@ MRT_table = ddb.Table('MRT')
 ssm = boto3.client('ssm')
 
 #### This section sets whether the prod or staging API is selected
-# stage = 'prod'
-stage = 'test'
+stage = 'prod'
+# stage = 'test'
 
 if stage == 'prod':
     bot_token = ssm.get_parameter(Name='/telegram/prod-token', WithDecryption=True)['Parameter']['Value']

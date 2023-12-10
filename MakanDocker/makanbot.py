@@ -480,7 +480,7 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     else:
         print ('Searching for food')
         logger.info("Location of %s: %f / %f", chatid, user_location.latitude, user_location.longitude)
-        message = 'Looking for some delicious makan spots now 🍣 \n\nHow about...'
+        message = 'Looking for some delicious makan spots now 🍣\n\nHow about...'
         send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
         requests.get(send_text)
 
@@ -563,7 +563,7 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
                 'chatID':chatid
             }
         )
-        message = 'Looking for some delicious makan spots now 🍣 \n\n How about...'
+        message = 'Looking for some delicious makan spots now 🍣\n\nHow about...'
         send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
         requests.get(send_text)
         user_food_choice = user_info['Item']['food_choice']
@@ -616,7 +616,7 @@ async def get_mrt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         user_geohash = mrt_info['Items'][0]['Geohash']
         user_latitude = float(mrt_info['Items'][0]['Latitude'])
         user_longitude = float(mrt_info['Items'][0]['Longitude'])
-        message = 'Looking for some delicious makan spots now 🍣 \n\n How about...'
+        message = 'Looking for some delicious makan spots now 🍣\n\nHow about...'
         send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
         requests.get(send_text)
         user_food_choice = ''

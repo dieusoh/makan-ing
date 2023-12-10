@@ -112,7 +112,7 @@ back_to_food_categories_reply = ("Sure! Let's pick something else.")
 
 mrt_reply = ("Type in the nearest MRT station to where you currently are, or where you're planning to go!")
 
-mrt_error_reply = ("Sorry, I didn't understand that, could you try typing it in again or choosing another location?")
+mrt_error_reply = ("Oops, so sorry! I didn't quite understand that. Could you try typing it again or choosing another location?")
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
 
@@ -704,25 +704,25 @@ async def about(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
 
-# ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
-# When user sends /feedback, this message will trigger:
-async def feedback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    print("User is in /feedback")
-    ### !!! REWORK THIS MESSAGE IN THE FUTURE. Make it more concise. 
-    feedback_text = ("Makan-ing is built for the everyday Singaporean! We are always looking for ways to improve our app and make it better. \n\n"
-                     + "You can email us at hello@makaning.com if you:\n"
-                     + "- Have any feedback (good or bad)\n"
-                     + "- Have a makan spots you would like to recommend\n"
-                     + "- Are interested in any partnerships or collaboration\n"
-                     + "- Or just want to say hi!\n\n"
-                     + "We read every email! ヽ(*⌒▽⌒*)ﾉ"
-    )
+# # ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
+# # When user sends /feedback, this message will trigger:
+# async def feedback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+#     print("User is in /feedback")
+#     ### !!! REWORK THIS MESSAGE IN THE FUTURE. Make it more concise. 
+#     feedback_text = ("Makan-ing is built for the everyday Singaporean! We are always looking for ways to improve our app and make it better. \n\n"
+#                      + "You can email us at hello@makaning.com if you:\n"
+#                      + "- Have any feedback (good or bad)\n"
+#                      + "- Have a makan spots you would like to recommend\n"
+#                      + "- Are interested in any partnerships or collaboration\n"
+#                      + "- Or just want to say hi!\n\n"
+#                      + "We read every email! ヽ(*⌒▽⌒*)ﾉ"
+#     )
 
-    await update.message.reply_text(
-        feedback_text, parse_mode=ParseMode.HTML, reply_markup=ReplyKeyboardRemove()
-    )
+#     await update.message.reply_text(
+#         feedback_text, parse_mode=ParseMode.HTML, reply_markup=ReplyKeyboardRemove()
+#     )
     
-    return ConversationHandler.END
+#     return ConversationHandler.END
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
 
@@ -734,10 +734,10 @@ async def feedback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     feedback_text = ("Makan-ing is built for the everyday Singaporean! We are always looking for ways to improve our app and make it better. \n\n"
                      + "You can email us at hello@makaning.com if you:\n"
                      + "- Have any feedback (good or bad)\n"
-                     + "- Have a makan spots you would like to recommend\n"
+                     + "- Have a makan spot you would like to recommend\n"
                      + "- Are interested in any partnerships or collaboration\n"
-                     + "- Or just want to say hi!\n\n"
-                     + "We read every email! ヽ(*⌒▽⌒*)ﾉ"
+                     + "- Just want to say hi!\n\n"
+                     + "We read every email! ╰(*´︶`*)╯♡"
     )
 
     await update.message.reply_text(

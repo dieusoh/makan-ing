@@ -112,7 +112,7 @@ back_to_food_categories_reply = ("Sure! Let's pick something else.")
 
 mrt_reply = ("Type in the nearest MRT station to where you currently are, or where you're planning to go!")
 
-mrt_error_reply = ("Sorry, I didn't understand that, could you try typing it in again or choosing another location?")
+mrt_error_reply = ("Oops, so sorry! I didn't quite understand that. Could you try typing it again or choosing another location?")
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
 
@@ -483,7 +483,7 @@ async def location(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     else:
         print ('Searching for food')
         logger.info("Location of %s: %f / %f", chatid, user_location.latitude, user_location.longitude)
-        message = 'Looking for some delicious makan spots now 🍣 \n\nHow about...'
+        message = 'Looking for some delicious makan spots now 🍣\n\nHow about...'
         send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
         requests.get(send_text)
 
@@ -566,7 +566,7 @@ async def random(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
                 'chatID':chatid
             }
         )
-        message = 'Looking for some delicious makan spots now 🍣 \n\n How about...'
+        message = 'Looking for some delicious makan spots now 🍣\n\nHow about...'
         send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
         requests.get(send_text)
         user_food_choice = user_info['Item']['food_choice']
@@ -619,7 +619,7 @@ async def get_mrt(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         user_geohash = mrt_info['Items'][0]['Geohash']
         user_latitude = float(mrt_info['Items'][0]['Latitude'])
         user_longitude = float(mrt_info['Items'][0]['Longitude'])
-        message = 'Looking for some delicious makan spots now 🍣 \n\n How about...'
+        message = 'Looking for some delicious makan spots now 🍣\n\nHow about...'
         send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + str(chatid) + '&parse_mode=Markdown&text=' + message
         requests.get(send_text)
         user_food_choice = ''
@@ -704,25 +704,25 @@ async def about(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
 
-# ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
-# When user sends /feedback, this message will trigger:
-async def feedback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    print("User is in /feedback")
-    ### !!! REWORK THIS MESSAGE IN THE FUTURE. Make it more concise. 
-    feedback_text = ("Makan-ing is built for the everyday Singaporean! We are always looking for ways to improve our app and make it better. \n\n"
-                     + "You can email us at hello@makaning.com if you:\n"
-                     + "- Have any feedback (good or bad)\n"
-                     + "- Have a makan spots you would like to recommend\n"
-                     + "- Are interested in any partnerships or collaboration\n"
-                     + "- Or just want to say hi!\n\n"
-                     + "We read every email! ヽ(*⌒▽⌒*)ﾉ"
-    )
+# # ଘ(੭ˊ꒳​ˋ)੭✧ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ ⋆｡°✩ ⋆⁺｡˚⋆˙‧₊✩₊‧˙⋆˚｡⁺⋆ ✩°｡⋆ 
+# # When user sends /feedback, this message will trigger:
+# async def feedback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+#     print("User is in /feedback")
+#     ### !!! REWORK THIS MESSAGE IN THE FUTURE. Make it more concise. 
+#     feedback_text = ("Makan-ing is built for the everyday Singaporean! We are always looking for ways to improve our app and make it better. \n\n"
+#                      + "You can email us at hello@makaning.com if you:\n"
+#                      + "- Have any feedback (good or bad)\n"
+#                      + "- Have a makan spots you would like to recommend\n"
+#                      + "- Are interested in any partnerships or collaboration\n"
+#                      + "- Or just want to say hi!\n\n"
+#                      + "We read every email! ヽ(*⌒▽⌒*)ﾉ"
+#     )
 
-    await update.message.reply_text(
-        feedback_text, parse_mode=ParseMode.HTML, reply_markup=ReplyKeyboardRemove()
-    )
+#     await update.message.reply_text(
+#         feedback_text, parse_mode=ParseMode.HTML, reply_markup=ReplyKeyboardRemove()
+#     )
     
-    return ConversationHandler.END
+#     return ConversationHandler.END
 
 # 𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼𓍊𓋼
 
@@ -734,10 +734,10 @@ async def feedback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     feedback_text = ("Makan-ing is built for the everyday Singaporean! We are always looking for ways to improve our app and make it better. \n\n"
                      + "You can email us at hello@makaning.com if you:\n"
                      + "- Have any feedback (good or bad)\n"
-                     + "- Have a makan spots you would like to recommend\n"
+                     + "- Have a makan spot you would like to recommend\n"
                      + "- Are interested in any partnerships or collaboration\n"
-                     + "- Or just want to say hi!\n\n"
-                     + "We read every email! ヽ(*⌒▽⌒*)ﾉ"
+                     + "- Just want to say hi!\n\n"
+                     + "We read every email! ╰(*´︶`*)╯♡"
     )
 
     await update.message.reply_text(

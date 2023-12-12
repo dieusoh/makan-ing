@@ -695,6 +695,7 @@ async def about(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
                   + "📍 <u>Find makan spots</u> based on your preferred cuisine and location \n"
                   + "🍙 <u>Provide food recommendations</u> if you can't decide on what to eat \n\n"
                   + "Just type /start or select it from the menu bar, and I'll help you discover your next delicious meal! \n\n"
+                  + "P.S. I work best on the Telegram mobile app!"
 
     )
     await update.message.reply_text(

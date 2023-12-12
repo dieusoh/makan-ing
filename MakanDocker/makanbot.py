@@ -124,7 +124,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> str:
     user = update.effective_user
     first_name = user.first_name
     start_reply = ("Hi " + first_name + "! ✨ " + "I'm the Makan-ing bot. I can help find some makan spots near you or where you're planning to go! \n\n"
-                   + "What do you feel like eating today?")
+                   + "What do you feel like eating today? Please use one of the buttons below!")
 
 # 1st set of food categories; functionally the same as selection_1
     await update.message.reply_text (
